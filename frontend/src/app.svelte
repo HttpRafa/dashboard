@@ -13,7 +13,4 @@
 </div>
 
 <style>
-    :root {
-        background-color: var(--color-zinc-800);
-    }
 </style>
