@@ -1,6 +1,5 @@
-# Detect OS (Windows_NT is set on Windows)
+# Detect OS
 ifeq ($(OS),Windows_NT)
-    SHELL := cmd
     COPY := xcopy /E /I /Y
     REMOVE := rmdir /S /Q
 else
@@ -8,14 +7,17 @@ else
     REMOVE := rm -rf
 endif
 
-.PHONY: all frontend backend clean
+.PHONY: run-dev build-frontend dev-backend clean
 
-all: frontend backend
+dev-backend: build-frontend dev-backend
 
-frontend:
+build-frontend:
 	cd frontend && bun run build
 
-backend: 
+dev-frontend:
+	cd frontend && bun run dev
+
+dev-backend: 
 	$(REMOVE) backend/static
 	$(COPY) frontend/dist backend/static
 	cd backend && cargo run
