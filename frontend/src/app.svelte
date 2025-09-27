@@ -1,13 +1,19 @@
 <script lang="ts">
     import Sidebar from "./main/sidebar.svelte";
+    import Header from "./main/header.svelte";
 </script>
 
-<div class="min-h-screen flex flex-col md:flex-row">
-    <Sidebar />
+<div class="flex">
+    <Sidebar/>
+    <div class="flex-1">
+        <Header/>
+        <main class="flex-1 p-6">
+        </main>
+    </div>
 </div>
 
 <style>
     :root {
-        background-color: var(--color-zinc-00);
+        background-color: var(--color-zinc-800);
     }
 </style>
