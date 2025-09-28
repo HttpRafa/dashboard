@@ -2,7 +2,7 @@
 </script>
 
 <aside
-    class="flex flex-col border-r border-zinc-700 text-zinc-400 w-20 h-screen space-y-6"
+    class="flex flex-col border-r border-zinc-700 text-zinc-400 w-20 min-h-screen space-y-6"
 >
     <!-- Navigation icons -->
     <nav class="flex-1 flex flex-col">
@@ -29,6 +29,14 @@
         >
             <span class="material-symbols-outlined">assignment_add</span>
             <p class="text-xs">Requests</p>
+        </a>
+        <!-- Issues -->
+        <a
+            href="/"
+            class="flex flex-col items-center justify-center h-16 hover:bg-zinc-700 transition"
+        >
+            <span class="material-symbols-outlined">pulse_alert</span>
+            <p class="text-xs">Issues</p>
         </a>
         <!-- Feedback -->
         <a

@@ -1,10 +1,10 @@
 <script lang="ts">
 </script>
 
-<div class="flex items-center justify-center">
+<div class="flex flex-col md:flex-row justify-center">
     <!-- Left -->
-    <div>
-        <div class="flex-1 flex flex-col gap-8">
+    <div class="md:w-2/3">
+        <div class="flex-1 flex flex-col gap-8 p-4">
             <!-- Available Services -->
             <div>
                 <h2 class="text-white text-lg font-semibold mb-4">
@@ -38,13 +38,13 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined"
+                                class="text-white text-2xl material-symbols-outlined animate-pulse"
                                 >ecg_heart</span
                             >
                         </div>
                         <a
                             href="/"
-                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800"
+                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800 transition"
                             >Manage servers</a
                         >
                     </div>
@@ -75,19 +75,19 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined"
+                                class="text-white text-2xl material-symbols-outlined animate-pulse"
                                 >ecg_heart</span
                             >
                         </div>
                         <a
                             href="/"
-                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800"
+                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800 transition"
                             >Manage passwords</a
                         >
                     </div>
                     <!-- Open Cloud -->
                     <div
-                        class="bg-zinc-500/50 rounded-lg p-4 flex flex-col justify-between"
+                        class="bg-zinc-500/30 rounded-lg p-4 flex flex-col justify-between"
                     >
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2">
@@ -148,19 +148,19 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined"
+                                class="text-white text-2xl material-symbols-outlined animate-pulse"
                                 >ecg_heart</span
                             >
                         </div>
                         <a
                             href="/"
-                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800"
+                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800 transition"
                             >Manage photos</a
                         >
                     </div>
                     <!-- MinIO -->
                     <div
-                        class="bg-zinc-500/50 rounded-lg p-4 flex flex-col justify-between"
+                        class="bg-zinc-500/30 rounded-lg p-4 flex flex-col justify-between"
                     >
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2">
@@ -221,13 +221,13 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined"
+                                class="text-white text-2xl material-symbols-outlined animate-pulse"
                                 >ecg_heart</span
                             >
                         </div>
                         <a
                             href="/"
-                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800"
+                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800 transition"
                             >Manage inventory</a
                         >
                     </div>
@@ -258,13 +258,13 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined"
+                                class="text-white text-2xl material-symbols-outlined animate-pulse"
                                 >ecg_heart</span
                             >
                         </div>
                         <a
                             href="/"
-                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800"
+                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800 transition"
                             >Manage data</a
                         >
                     </div>
@@ -295,13 +295,13 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined"
+                                class="text-white text-2xl material-symbols-outlined animate-pulse"
                                 >ecg_heart</span
                             >
                         </div>
                         <a
                             href="/"
-                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800"
+                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800 transition"
                             >Manage workflows</a
                         >
                     </div>
@@ -319,6 +319,63 @@
                         <li>Plex Media Server</li>
                         <li>Jellyfin</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Right -->
+    <div class="md:w-1/3">
+        <div class="flex-1 flex flex-col gap-8 p-4">
+            <!-- Recent Activity -->
+            <div>
+                <h2 class="text-white text-lg font-semibold mb-4">
+                    Recent Activity
+                </h2>
+                <div
+                    class="bg-zinc-500/30 rounded-lg p-4 min-h-[120px] mb-4 text-gray-200 text-sm flex flex-col gap-2"
+                >
+                    <span
+                        >You requested 1TB of space for Open Cloud (Pending)</span
+                    >
+                    <span>Game Server “Valheim” requested</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                    <span>System update completed</span>
+                </div>
+            </div>
+            <!-- Quick Actions -->
+            <div>
+                <h2 class="text-white text-lg font-semibold mb-4">
+                    Quick Actions
+                </h2>
+                <div class="flex gap-2 mb-2">
+                    <a
+                        href="/"
+                        class="flex-1 bg-blue-500/65 hover:bg-blue-700/65 text-white rounded-lg px-6 py-2 transition"
+                    >
+                        <span class="font-medium align-middle">Request resources</span>
+                    </a>
+                    <a
+                        href="/"
+                        class="flex-1 bg-emerald-400/65 hover:bg-emerald-700/65 text-white rounded-lg px-6 py-2 transition"
+                    >
+                        <span class="font-medium align-middle">Submit feedback</span>
+                    </a>
+                </div>
+                <div class="flex gap-2 mb-2">
+                    <a
+                        href="/"
+                        class="flex-1 bg-red-400/25 hover:bg-red-400/60 text-white rounded-lg px-6 py-2 transition"
+                    >
+                        <span class="font-medium align-middle">Report an issue</span>
+                    </a>
                 </div>
             </div>
         </div>

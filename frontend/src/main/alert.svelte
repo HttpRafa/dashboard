@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<div role="status" aria-live="polite" class="flex justify-center w-full mb-8">
+<div role="status" aria-live="polite" class="flex justify-center w-full mb-4">
     <div
         class="inline-flex items-center gap-3 rounded-lg px-4 py-2 shadow-sm bg-blue-500/20 border border-blue-400/30 backdrop-blur-sm ring-1 ring-blue-500/10"
     >

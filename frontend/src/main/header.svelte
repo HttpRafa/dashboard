@@ -26,7 +26,7 @@
             />
         </a>
         <!-- Notification Bell -->
-        <a href="/" class="relative text-zinc-400 hover:text-emerald-500">
+        <a href="/" class="relative text-zinc-400 hover:text-emerald-500 transition">
             <span class="material-symbols-outlined align-middle"
                 >notifications</span
             >
@@ -36,7 +36,7 @@
             ></span>
         </a>
         <!-- System Icon -->
-        <a href="/" class="text-zinc-400 hover:text-emerald-500">
+        <a href="/" class="text-zinc-400 hover:text-emerald-500 transition">
             <span class="material-symbols-outlined align-middle">info</span>
         </a>
     </div>
