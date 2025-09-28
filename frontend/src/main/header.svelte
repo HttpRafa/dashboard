@@ -6,7 +6,7 @@
     <div class="flex items-center space-x-4">
         <h1 class="text-3xl font-semibold text-gray-200">Homelab Services</h1>
         <img
-            src="/icon.png"
+            src="icons/icon.png"
             alt="Icon"
             class="w-10 h-10 object-cover rounded-full hidden sm:block"
         />

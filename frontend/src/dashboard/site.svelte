@@ -22,7 +22,7 @@
                                     class="w-8 h-8 rounded-full overflow-hidden"
                                 >
                                     <img
-                                        src="./src/assets/services/icons/pelican.png"
+                                        src="icons/services/pelican.png"
                                         alt="Service Avatar"
                                         class="w-full h-full object-cover"
                                     />
@@ -59,7 +59,7 @@
                                     class="w-8 h-8 rounded-full overflow-hidden"
                                 >
                                     <img
-                                        src="./src/assets/services/icons/vaultwarden.svg"
+                                        src="icons/services/vaultwarden.svg"
                                         alt="Service Avatar"
                                         class="w-full h-full object-cover"
                                     />
@@ -96,7 +96,7 @@
                                     class="w-8 h-8 rounded-full overflow-hidden"
                                 >
                                     <img
-                                        src="./src/assets/services/icons/opencloud.png"
+                                        src="icons/services/opencloud.png"
                                         alt="Service Avatar"
                                         class="w-full h-full object-cover"
                                     />
@@ -132,7 +132,7 @@
                                     class="w-8 h-8 rounded-full overflow-hidden"
                                 >
                                     <img
-                                        src="./src/assets/services/icons/immich.svg"
+                                        src="icons/services/immich.svg"
                                         alt="Service Avatar"
                                         class="w-full h-full object-cover"
                                     />
@@ -169,7 +169,7 @@
                                     class="w-8 h-8 rounded-full overflow-hidden"
                                 >
                                     <img
-                                        src="./src/assets/services/icons/minio.png"
+                                        src="icons/services/minio.png"
                                         alt="Service Avatar"
                                         class="w-full h-full object-cover"
                                     />
@@ -205,7 +205,7 @@
                                     class="w-8 h-8 rounded-full overflow-hidden"
                                 >
                                     <img
-                                        src="./src/assets/services/icons/homebox.svg"
+                                        src="icons/services/homebox.svg"
                                         alt="Service Avatar"
                                         class="w-full h-full object-cover"
                                     />
@@ -242,7 +242,7 @@
                                     class="w-8 h-8 rounded-full overflow-hidden"
                                 >
                                     <img
-                                        src="./src/assets/services/icons/grafana.jpeg"
+                                        src="icons/services/grafana.jpeg"
                                         alt="Service Avatar"
                                         class="w-full h-full object-cover"
                                     />
@@ -279,7 +279,7 @@
                                     class="w-8 h-11 rounded-full overflow-hidden"
                                 >
                                     <img
-                                        src="./src/assets/services/icons/jenkins.svg"
+                                        src="icons/services/jenkins.svg"
                                         alt="Service Avatar"
                                         class="w-full h-full object-cover"
                                     />
