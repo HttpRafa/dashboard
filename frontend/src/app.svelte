@@ -7,12 +7,12 @@
 </script>
 
 <div class="flex">
-    <Sidebar/>
+    <Sidebar />
     <div class="flex-1">
-        <Header/>
+        <Header />
         <main class="flex-1 p-6">
-            <Alert/>
-            <Dashboard/>
+            <Alert />
+            <Dashboard />
         </main>
     </div>
 </div>
