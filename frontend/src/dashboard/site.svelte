@@ -112,7 +112,7 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined"
+                                class="text-white text-2xl material-symbols-outlined animate-bounce"
                                 >heart_broken</span
                             >
                         </div>
@@ -123,7 +123,7 @@
                     </div>
                     <!-- Immich -->
                     <div
-                        class="bg-emerald-400/65 rounded-lg p-4 flex flex-col justify-between"
+                        class="bg-sky-400/65 rounded-lg p-4 flex flex-col justify-between"
                     >
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2">
@@ -148,14 +148,14 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined animate-pulse"
-                                >ecg_heart</span
+                                class="text-white text-2xl material-symbols-outlined"
+                                >approval_delegation</span
                             >
                         </div>
                         <a
                             href="/"
-                            class="mt-2 bg-emerald-800/40 text-white rounded py-2 px-4 text-sm hover:bg-emerald-800 transition"
-                            >Manage photos</a
+                            class="mt-2 bg-sky-800/40 text-white rounded py-2 px-4 text-sm hover:bg-sky-800 transition"
+                            >Request access</a
                         >
                     </div>
                     <!-- MinIO -->
@@ -185,7 +185,7 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined"
+                                class="text-white text-2xl material-symbols-outlined animate-bounce"
                                 >heart_broken</span
                             >
                         </div>
@@ -360,13 +360,17 @@
                         href="/"
                         class="flex-1 bg-blue-500/65 hover:bg-blue-700/65 text-white rounded-lg px-6 py-2 transition"
                     >
-                        <span class="font-medium align-middle">Request resources</span>
+                        <span class="font-medium align-middle"
+                            >Request resources</span
+                        >
                     </a>
                     <a
                         href="/"
                         class="flex-1 bg-emerald-400/65 hover:bg-emerald-700/65 text-white rounded-lg px-6 py-2 transition"
                     >
-                        <span class="font-medium align-middle">Submit feedback</span>
+                        <span class="font-medium align-middle"
+                            >Submit feedback</span
+                        >
                     </a>
                 </div>
                 <div class="flex gap-2 mb-2">
@@ -374,7 +378,9 @@
                         href="/"
                         class="flex-1 bg-red-400/25 hover:bg-red-400/60 text-white rounded-lg px-6 py-2 transition"
                     >
-                        <span class="font-medium align-middle">Report an issue</span>
+                        <span class="font-medium align-middle"
+                            >Report an issue</span
+                        >
                     </a>
                 </div>
             </div>

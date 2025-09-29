@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { Page, currentPage } from "../page/page.svelte.ts";
+
+    import Icon from "./sidebar/icon.svelte";
 </script>
 
 <aside
@@ -7,56 +10,62 @@
     <!-- Navigation icons -->
     <nav class="flex-1 flex flex-col">
         <!-- Dashboard -->
-        <a
-            href="/"
-            class="flex flex-col items-center justify-center h-16 bg-zinc-700 shadow-[inset_-3px_0_0_0_#00bc7d] transition"
-        >
-            <span class="material-symbols-outlined">dashboard</span>
-            <p class="text-xs">Dashboard</p>
-        </a>
-        <!-- Services -->
-        <a
-            href="/"
-            class="flex flex-col items-center justify-center h-16 hover:bg-zinc-700 transition"
-        >
-            <span class="material-symbols-outlined">apps</span>
-            <p class="text-xs">Services</p>
-        </a>
+        <Icon
+            icon={"dashboard"}
+            text={"Dashboard"}
+            selected={currentPage.page == Page.dashboard}
+            onClicked={() => {
+                currentPage.page = Page.dashboard;
+            }}
+        />
         <!-- Requests -->
-        <a
-            href="/"
-            class="flex flex-col items-center justify-center h-16 hover:bg-zinc-700 transition"
-        >
-            <span class="material-symbols-outlined">assignment_add</span>
-            <p class="text-xs">Requests</p>
-        </a>
+        <Icon
+            icon={"assignment_add"}
+            text={"Requests"}
+            selected={currentPage.page == Page.requests}
+            onClicked={() => {
+                currentPage.page = Page.requests;
+            }}
+        />
         <!-- Issues -->
-        <a
-            href="/"
-            class="flex flex-col items-center justify-center h-16 hover:bg-zinc-700 transition"
-        >
-            <span class="material-symbols-outlined">pulse_alert</span>
-            <p class="text-xs">Issues</p>
-        </a>
+        <Icon
+            icon={"pulse_alert"}
+            text={"Issues"}
+            selected={currentPage.page == Page.issues}
+            onClicked={() => {
+                currentPage.page = Page.issues;
+            }}
+        />
         <!-- Feedback -->
-        <a
-            href="/"
-            class="flex flex-col items-center justify-center h-16 hover:bg-zinc-700 transition"
-        >
-            <span class="material-symbols-outlined">feedback</span>
-            <p class="text-xs">Feedback</p>
-        </a>
+        <Icon
+            icon={"feedback"}
+            text={"Feedback"}
+            selected={currentPage.page == Page.feedback}
+            onClicked={() => {
+                currentPage.page = Page.feedback;
+            }}
+        />
     </nav>
 
-    <!-- Settings -->
-    <div class="flex flex-col space-y-2">
-        <a
-            href="/"
-            class="flex flex-col items-center justify-center h-16 hover:bg-zinc-700 transition"
-        >
-            <span class="material-symbols-outlined">settings_account_box</span>
-            <p class="text-xs">Settings</p>
-        </a>
+    <div class="flex flex-col">
+        <!-- Identity -->
+        <Icon
+            icon={"frame_person"}
+            text={"Identity"}
+            selected={false}
+            onClicked={() => {
+                window.location.href = "https://auth.httxrafa.dev";
+            }}
+        />
+        <!-- Settings -->
+        <Icon
+            icon={"settings_account_box"}
+            text={"Settings"}
+            selected={currentPage.page == Page.settings}
+            onClicked={() => {
+                currentPage.page = Page.settings;
+            }}
+        />
     </div>
 </aside>
 
