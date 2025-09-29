@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { Page, currentPage } from "../page/page.svelte.ts";
 </script>
 
 <header class="flex items-center justify-between px-6 py-4 h-16 bg-zinc-800">
@@ -15,18 +16,20 @@
     <!-- Right side -->
     <div class="flex items-center space-x-4">
         <!-- User Avatar -->
-        <a
-            href="/"
-            class="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-700"
+        <button
+            onclick={() => {
+                currentPage.page = Page.settings;
+            }}
+            class="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-700 cursor-pointer"
         >
             <img
                 src="https://avatars.githubusercontent.com/u/60099368"
                 alt="User Avatar"
                 class="w-full h-full object-cover"
             />
-        </a>
+        </button>
         <!-- Notification Bell -->
-        <a href="/" class="relative text-zinc-400 hover:text-emerald-500 transition">
+        <button class="relative text-zinc-400 hover:text-emerald-500 transition cursor-pointer">
             <span class="material-symbols-outlined align-middle"
                 >notifications</span
             >
@@ -34,11 +37,11 @@
             <span
                 class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"
             ></span>
-        </a>
+        </button>
         <!-- System Icon -->
-        <a href="/" class="text-zinc-400 hover:text-emerald-500 transition">
+        <button class="text-zinc-400 hover:text-emerald-500 transition cursor-pointer">
             <span class="material-symbols-outlined align-middle">info</span>
-        </a>
+        </button>
     </div>
 </header>
 
