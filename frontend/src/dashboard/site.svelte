@@ -87,7 +87,7 @@
                     </div>
                     <!-- Open Cloud -->
                     <div
-                        class="bg-zinc-500/30 rounded-lg p-4 flex flex-col justify-between"
+                        class="bg-zinc-600/30 rounded-lg p-4 flex flex-col justify-between"
                     >
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2">
@@ -160,7 +160,7 @@
                     </div>
                     <!-- MinIO -->
                     <div
-                        class="bg-zinc-500/30 rounded-lg p-4 flex flex-col justify-between"
+                        class="bg-zinc-600/30 rounded-lg p-4 flex flex-col justify-between"
                     >
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2">
@@ -332,7 +332,7 @@
                     Recent Activity
                 </h2>
                 <div
-                    class="bg-zinc-500/30 rounded-lg p-4 min-h-[120px] mb-4 text-gray-200 text-sm flex flex-col gap-2"
+                    class="bg-zinc-600/30 rounded-lg p-4 min-h-[120px] mb-4 text-gray-200 text-sm flex flex-col gap-2"
                 >
                     <span
                         >You requested 1TB of space for Open Cloud (Pending)</span
