@@ -112,7 +112,7 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined animate-bounce"
+                                class="text-white text-2xl material-symbols-outlined animate-ping"
                                 >heart_broken</span
                             >
                         </div>
@@ -185,7 +185,7 @@
                                 </div>
                             </div>
                             <span
-                                class="text-white text-2xl material-symbols-outlined animate-bounce"
+                                class="text-white text-2xl material-symbols-outlined animate-ping"
                                 >heart_broken</span
                             >
                         </div>

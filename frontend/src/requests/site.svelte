@@ -4,20 +4,28 @@
 <!-- Main Container -->
 <div class="p-4 sm:p-6 lg:p-8">
     <!-- Header Section -->
-    <header class="flex justify-between items-center mb-4">
-        <button
-            class="bg-blue-500/65 hover:bg-blue-700/65 text-white font-semibold py-2 px-6 rounded-lg transition cursor-pointer"
-        >
-            New resource request
-        </button>
-        <button
-            class="flex items-center bg-zinc-600/30 hover:bg-zinc-600/70 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
-        >
-            <span>Filter</span>
-            <span class="text-lg ml-1 material-symbols-outlined"
-                >expand_more</span
+    <header>
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-white">Requests</h1>
+            <p class="text-slate-300 mt-1">
+                View your requested resources and request new resources
+            </p>
+        </div>
+        <div class="flex justify-between items-center mb-4">
+            <button
+                class="bg-blue-500/65 hover:bg-blue-700/65 text-white font-semibold py-2 px-6 rounded-lg transition cursor-pointer"
             >
-        </button>
+                New resource request
+            </button>
+            <button
+                class="flex items-center bg-zinc-600/30 hover:bg-zinc-600/70 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer"
+            >
+                <span>Filter</span>
+                <span class="text-lg ml-1 material-symbols-outlined"
+                    >expand_more</span
+                >
+            </button>
+        </div>
     </header>
 
     <!-- Requests List -->
@@ -68,7 +76,9 @@
                 <span
                     class="inline-flex items-center bg-green-500/10 text-green-400 text-xs font-semibold px-3 py-1 rounded-full"
                 >
-                    <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                    <span
+                        class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"
+                    ></span>
                     Approved
                 </span>
             </div>
@@ -116,7 +126,9 @@
                 <span
                     class="inline-flex items-center bg-blue-500/10 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full"
                 >
-                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                    <span
+                        class="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"
+                    ></span>
                     Pending
                 </span>
             </div>
@@ -164,152 +176,10 @@
                 <span
                     class="inline-flex items-center bg-red-500/10 text-red-400 text-xs font-semibold px-3 py-1 rounded-full"
                 >
-                    <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+                    <span
+                        class="w-2 h-2 bg-red-400 rounded-full mr-2 animate-pulse"
+                    ></span>
                     Denied
-                </span>
-            </div>
-            <!-- Date -->
-            <div class="col-span-12 md:col-span-2 text-right">
-                <p class="text-sm font-semibold text-white">
-                    29.09.2025 at 05:00 PM
-                </p>
-            </div>
-        </div>
-
-        <!-- Request Item 4 -->
-        <div
-            class="bg-zinc-600/30 p-4 rounded-lg shadow-lg grid grid-cols-12 gap-4 items-center hover:bg-zinc-600/40 transition"
-        >
-            <!-- Request Info -->
-            <div class="col-span-12 md:col-span-5 flex items-center space-x-4">
-                <div
-                    class="bg-zinc-800 w-12 h-12 flex items-center justify-center rounded-full"
-                >
-                    <span class="text-green-300 material-symbols-outlined"
-                        >check_circle</span
-                    >
-                </div>
-                <div>
-                    <p class="font-semibold text-white">
-                        Increased inventory Management License Count
-                    </p>
-                </div>
-            </div>
-            <!-- Service Info -->
-            <div class="col-span-12 md:col-span-3 flex items-center space-x-3">
-                <img
-                    src="https://placehold.co/32x32/334155/FFFFFF?text=IM"
-                    alt="Inventory Management"
-                    class="w-8 h-8 rounded-md"
-                />
-                <div>
-                    <p class="font-medium text-white">Inventory Management</p>
-                    <p class="text-sm text-slate-400">Homebox</p>
-                </div>
-            </div>
-            <!-- Status -->
-            <div class="col-span-12 md:col-span-2">
-                <span
-                    class="inline-flex items-center bg-green-500/10 text-green-400 text-xs font-semibold px-3 py-1 rounded-full"
-                >
-                    <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                    Approved
-                </span>
-            </div>
-            <!-- Date -->
-            <div class="col-span-12 md:col-span-2 text-right">
-                <p class="text-sm font-semibold text-white">
-                    29.09.2025 at 05:00 PM
-                </p>
-            </div>
-        </div>
-
-        <!-- Request Item 5 -->
-        <div
-            class="bg-zinc-600/30 p-4 rounded-lg shadow-lg grid grid-cols-12 gap-4 items-center hover:bg-zinc-600/40 transition"
-        >
-            <!-- Request Info -->
-            <div class="col-span-12 md:col-span-5 flex items-center space-x-4">
-                <div
-                    class="bg-zinc-800 w-12 h-12 flex items-center justify-center rounded-full"
-                >
-                    <span class="text-blue-400 material-symbols-outlined"
-                        >photo_size_select_actual</span
-                    >
-                </div>
-                <div>
-                    <p class="font-semibold text-white">
-                        200GB Additional Storage for Photos
-                    </p>
-                </div>
-            </div>
-            <!-- Service Info -->
-            <div class="col-span-12 md:col-span-3 flex items-center space-x-3">
-                <img
-                    src="https://placehold.co/32x32/334155/FFFFFF?text=PG"
-                    alt="Photo Gallery"
-                    class="w-8 h-8 rounded-md"
-                />
-                <div>
-                    <p class="font-medium text-white">Photo Gallery</p>
-                    <p class="text-sm text-slate-400">Immich</p>
-                </div>
-            </div>
-            <!-- Status -->
-            <div class="col-span-12 md:col-span-2">
-                <span
-                    class="inline-flex items-center bg-blue-500/10 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full"
-                >
-                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-                    Pending
-                </span>
-            </div>
-            <!-- Date -->
-            <div class="col-span-12 md:col-span-2 text-right">
-                <p class="text-sm font-semibold text-white">
-                    29.09.2025 at 05:00 PM
-                </p>
-            </div>
-        </div>
-
-        <!-- Request Item 6 -->
-        <div
-            class="bg-zinc-600/30 p-4 rounded-lg shadow-lg grid grid-cols-12 gap-4 items-center hover:bg-zinc-600/40 transition"
-        >
-            <!-- Request Info -->
-            <div class="col-span-12 md:col-span-5 flex items-center space-x-4">
-                <div
-                    class="bg-zinc-800 w-12 h-12 flex items-center justify-center rounded-full"
-                >
-                    <span class="text-blue-400 material-symbols-outlined"
-                        >add_photo_alternate</span
-                    >
-                </div>
-                <div>
-                    <p class="font-semibold text-white">
-                        JPG Additional Storage for Photos
-                    </p>
-                </div>
-            </div>
-            <!-- Service Info -->
-            <div class="col-span-12 md:col-span-3 flex items-center space-x-3">
-                <img
-                    src="https://placehold.co/32x32/334155/FFFFFF?text=PG"
-                    alt="Photo Gallery"
-                    class="w-8 h-8 rounded-md"
-                />
-                <div>
-                    <p class="font-medium text-white">Photo Gallery</p>
-                    <p class="text-sm text-slate-400">Immich</p>
-                </div>
-            </div>
-            <!-- Status -->
-            <div class="col-span-12 md:col-span-2">
-                <span
-                    class="inline-flex items-center bg-blue-500/10 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full"
-                >
-                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-                    Pending
                 </span>
             </div>
             <!-- Date -->

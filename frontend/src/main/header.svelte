@@ -28,20 +28,19 @@
                 class="w-full h-full object-cover"
             />
         </button>
-        <!-- Notification Bell -->
+        <!-- Notification Bell 
         <button class="relative text-zinc-400 hover:text-emerald-500 transition cursor-pointer">
             <span class="material-symbols-outlined align-middle"
                 >notifications</span
             >
-            <!-- Notification Dot -->
             <span
                 class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"
             ></span>
-        </button>
-        <!-- System Icon -->
+        </button>-->
+        <!-- System Icon 
         <button class="text-zinc-400 hover:text-emerald-500 transition cursor-pointer">
             <span class="material-symbols-outlined align-middle">info</span>
-        </button>
+        </button>-->
     </div>
 </header>
 
