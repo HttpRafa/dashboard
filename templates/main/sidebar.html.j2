@@ -1,0 +1,32 @@
+<aside class="flex flex-col border-r border-zinc-700 text-zinc-400 w-20 min-h-screen space-y-6">
+    <!-- Navigation icons -->
+    <nav class="flex-1 flex flex-col">
+        <!-- Dashboard -->
+        {% with selected = (currently_selected == "dashboard"), href = "/", icon = "dashboard", text = "Dashboard" %}
+        {% include "main/sidebar/icon" %}
+        {% endwith %}
+        <!-- Requests -->
+        {% with selected = (currently_selected == "requests"), href = "/requests/", icon = "assignment_add", text = "Requests" %}
+        {% include "main/sidebar/icon" %}
+        {% endwith %}
+        <!-- Issues -->
+        {% with selected = (currently_selected == "issues"), href = "/issues/", icon = "pulse_alert", text = "Issues" %}
+        {% include "main/sidebar/icon" %}
+        {% endwith %}
+        <!-- Feedback -->
+        {% with selected = (currently_selected == "feedback"), href = "/feedback/", icon = "feedback", text = "Feedback" %}
+        {% include "main/sidebar/icon" %}
+        {% endwith %}
+    </nav>
+
+    <div class="flex flex-col">
+        <!-- Identity -->
+        {% with selected = false, href = "https://auth.httxrafa.dev/", icon = "frame_person", text = "Identity" %}
+        {% include "main/sidebar/icon" %}
+        {% endwith %}
+        <!-- Settings -->
+        {% with selected = (currently_selected == "settings"), href = "/settings/", icon = "settings_account_box", text = "Settings" %}
+        {% include "main/sidebar/icon" %}
+        {% endwith %}
+    </div>
+</aside>
