@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 rocket = "0.5.1"
-rocket_dyn_templates = { version = "0.2.0", features = ["minijinja"] }
+maud = { version = "0.27.0", features = ["rocket"] }

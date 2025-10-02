@@ -1,5 +1,4 @@
 use rocket::{Build, Rocket, fs::FileServer, launch, routes};
-use rocket_dyn_templates::Template;
 
 use crate::route::{
     dashboard::dashboard, feedback::feedback, issues::issues, requests::requests,
@@ -7,6 +6,7 @@ use crate::route::{
 };
 
 mod route;
+mod component;
 
 #[launch]
 async fn rocket() -> Rocket<Build> {
@@ -16,5 +16,4 @@ async fn rocket() -> Rocket<Build> {
             "/",
             routes![dashboard, requests, issues, feedback, settings],
         )
-        .attach(Template::fairing())
 }
