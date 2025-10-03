@@ -4,5 +4,13 @@
   },
   "tailwindCSS.experimental.classRegex": [
     ["\\w+((?:\\.\\s*\\S+\\s*)*)", "\\.\"?([^.\"]+)\"?"]
+  ],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "Database",
+      "database": "${workspaceFolder:dashboard}/database.db"
+    }
   ]
 }
