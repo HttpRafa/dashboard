@@ -1,12 +1,11 @@
-use maud::{html, Markup};
-use rocket::get;
+use maud::{Markup, html};
 
-use crate::{component::util::base::BaseComponent, route::Route};
+pub struct SettingsComponent;
 
-#[get("/settings")]
-pub fn settings() -> Markup {
-    BaseComponent::build("Dashboard | Settings", Route::Settings, html! {
-        div class="p-4 sm:p-6 lg:p-8 pt-4 sm:pt-4 lg:pt-4" {
+impl SettingsComponent {
+    pub fn build() -> Markup {
+        html! {
+                    div class="p-4 sm:p-6 lg:p-8 pt-4 sm:pt-4 lg:pt-4" {
             // Header
             header class="mb-8" {
                 h1 class="text-3xl font-bold text-white" {
@@ -95,5 +94,6 @@ pub fn settings() -> Markup {
                 }
             }
         }
-    })
+        }
+    }
 }

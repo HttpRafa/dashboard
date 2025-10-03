@@ -1,12 +1,11 @@
-use maud::{html, Markup};
-use rocket::get;
+use maud::{Markup, html};
 
-use crate::{component::util::base::BaseComponent, route::Route};
+pub struct DashboardComponent;
 
-#[get("/")]
-pub fn dashboard() -> Markup {
-    BaseComponent::build("Dashboard | Home", Route::Dashboard, html! {
-        div class="flex flex-col md:flex-row justify-center" {
+impl DashboardComponent {
+    pub fn build() -> Markup {
+        html! {
+            div class="flex flex-col md:flex-row justify-center" {
             // Left
             div class="md:w-2/3" {
                 div class="flex-1 flex flex-col gap-8 p-4" {
@@ -296,5 +295,6 @@ pub fn dashboard() -> Markup {
                 }
             }
         }
-    })
+        }
+    }
 }

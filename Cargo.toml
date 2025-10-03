@@ -4,5 +4,21 @@ version = "0.0.0-nightly"
 edition = "2024"
 
 [dependencies]
+# Development
+dotenvy = "0.15.7"
+
+# Error handling
+eyre = { version = "0.6.12", default-features = false, features = ["auto-install", "track-caller"] }
+color-eyre = "0.6.5"
+
+# Web framework
 rocket = "0.5.1"
+tokio = "1.47.1"
 maud = { version = "0.27.0", features = ["rocket"] }
+
+# SQLite
+diesel = { version = "2.3.2", features = ["sqlite", "returning_clauses_for_sqlite_3_35"] }
+libsqlite3-sys = { version = "0.35.0", features = ["bundled"] }
+
+# OpenID
+openidconnect = "4.0.1"

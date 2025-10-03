@@ -1,4 +1,4 @@
-use maud::{html, Markup};
+use maud::{Markup, html};
 
 use crate::{component::util::sidebar::icon::IconComponent, route::Route};
 

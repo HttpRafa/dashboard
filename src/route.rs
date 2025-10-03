@@ -1,8 +1,7 @@
-pub mod dashboard;
-pub mod feedback;
-pub mod issues;
-pub mod requests;
-pub mod settings;
+use eyre::Result;
+use rocket::fs::FileServer;
+
+pub mod web;
 
 pub enum Route {
     Dashboard,
@@ -10,4 +9,13 @@ pub enum Route {
     Issues,
     Requests,
     Settings,
+}
+
+pub async fn launch_rocket() -> Result<()> {
+    rocket::build()
+        .mount("/", FileServer::from("public/"))
+        .mount("/", web::web_routes())
+        .launch()
+        .await?;
+    Ok(())
 }

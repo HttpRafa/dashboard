@@ -1,19 +1,13 @@
-use rocket::{Build, Rocket, fs::FileServer, launch, routes};
+use eyre::Result;
 
-use crate::route::{
-    dashboard::dashboard, feedback::feedback, issues::issues, requests::requests,
-    settings::settings,
-};
+use crate::route::launch_rocket;
 
-mod route;
 mod component;
+mod database;
+mod route;
 
-#[launch]
-async fn rocket() -> Rocket<Build> {
-    rocket::build()
-        .mount("/", FileServer::from("public/"))
-        .mount(
-            "/",
-            routes![dashboard, requests, issues, feedback, settings],
-        )
+#[rocket::main]
+async fn main() -> Result<()> {
+    launch_rocket().await?;
+    Ok(())
 }

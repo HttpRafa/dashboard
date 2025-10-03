@@ -1,25 +1,24 @@
-use maud::{html, Markup};
-use rocket::get;
+use maud::{Markup, html};
 
-use crate::{component::util::base::BaseComponent, route::Route};
+pub struct IssuesComponent;
 
-#[get("/requests")]
-pub fn requests() -> Markup {
-    BaseComponent::build("Dashboard | Requests", Route::Requests, html! {
-        div class="p-4 sm:p-6 lg:p-8 pt-4 sm:pt-4 lg:pt-4" {
+impl IssuesComponent {
+    pub fn build() -> Markup {
+        html! {
+                    div class="p-4 sm:p-6 lg:p-8 pt-4 sm:pt-4 lg:pt-4" {
             // Header
             header {
                 div class="mb-8" {
                     h1 class="text-3xl font-bold text-white" {
-                        "Requests"
+                        "Issues"
                     }
                     p class="text-slate-300 mt-1" {
-                        "View your requested resources and request new resources"
+                        "View your reported issues and report new issues"
                     }
                 }
                 div class="flex justify-between items-center mb-4" {
-                    a class="bg-blue-500/65 hover:bg-blue-700/65 text-white font-semibold py-2 px-6 rounded-lg transition" {
-                        "New resource request"
+                    a class="bg-red-500/65 hover:bg-red-700/65 text-white font-semibold py-2 px-6 rounded-lg transition" {
+                        "Report issue"
                     }
                     button class="flex items-center bg-zinc-600/30 hover:bg-zinc-600/70 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer" {
                         span {
@@ -32,12 +31,12 @@ pub fn requests() -> Markup {
                 }
             }
 
-            // Requests
+            // Issues
             div class="space-y-3"{
                 // Table Header
                 div class="hidden md:grid grid-cols-12 gap-4 px-4 py-2 text-lg font-bold text-white" {
                     div class="col-span-12 md:col-span-5" {
-                        "Request"
+                        "Issue"
                     }
                     div class="col-span-12 md:col-span-3" {
                         "Service"
@@ -50,7 +49,7 @@ pub fn requests() -> Markup {
                     }
                 }
 
-                // Request 1
+                // Issue 1
                 div class="bg-zinc-600/30 p-4 rounded-lg shadow-lg grid grid-cols-12 gap-4 items-center hover:bg-zinc-600/40 transition" {
                     // Info
                     div class="col-span-12 md:col-span-5 flex items-center space-x-4" {
@@ -81,7 +80,7 @@ pub fn requests() -> Markup {
                     div class="col-span-12 md:col-span-2" {
                         span class="inline-flex items-center bg-green-500/10 text-green-400 text-xs font-semibold px-3 py-1 rounded-full" {
                             span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse" {}
-                            "Approved"
+                            "Resolved"
                         }
                     }
                     // Date
@@ -92,7 +91,7 @@ pub fn requests() -> Markup {
                     }
                 }
 
-                // Request 2
+                // Issue 2
                 div class="bg-zinc-600/30 p-4 rounded-lg shadow-lg grid grid-cols-12 gap-4 items-center hover:bg-zinc-600/40 transition" {
                     // Info
                     div class="col-span-12 md:col-span-5 flex items-center space-x-4" {
@@ -123,7 +122,7 @@ pub fn requests() -> Markup {
                     div class="col-span-12 md:col-span-2" {
                         span class="inline-flex items-center bg-blue-500/10 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full" {
                             span class="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse" {}
-                            "Pending"
+                            "Investigating"
                         }
                     }
                     // Date
@@ -134,7 +133,7 @@ pub fn requests() -> Markup {
                     }
                 }
 
-                // Request 3
+                // Issue 3
                 div class="bg-zinc-600/30 p-4 rounded-lg shadow-lg grid grid-cols-12 gap-4 items-center hover:bg-zinc-600/40 transition" {
                     // Info
                     div class="col-span-12 md:col-span-5 flex items-center space-x-4" {
@@ -165,7 +164,7 @@ pub fn requests() -> Markup {
                     div class="col-span-12 md:col-span-2" {
                         span class="inline-flex items-center bg-red-500/10 text-red-400 text-xs font-semibold px-3 py-1 rounded-full" {
                             span class="w-2 h-2 bg-red-400 rounded-full mr-2 animate-pulse" {}
-                            "Denied"
+                            "Pending"
                         }
                     }
                     // Date
@@ -177,5 +176,6 @@ pub fn requests() -> Markup {
                 }
             }
         }
-    })
+        }
+    }
 }
