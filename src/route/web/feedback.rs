@@ -3,14 +3,14 @@ use rocket::get;
 
 use crate::{
     component::{root::feedback::FeedbackComponent, util::base::BaseComponent},
-    route::Route,
+    route::Page,
 };
 
 #[get("/feedback")]
-pub fn feedback() -> Markup {
+pub async fn feedback() -> Markup {
     BaseComponent::build(
         "Dashboard | Feedback",
-        Route::Feedback,
+        Page::Feedback,
         FeedbackComponent::build(),
     )
 }

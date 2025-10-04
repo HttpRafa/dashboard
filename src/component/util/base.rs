@@ -5,18 +5,18 @@ use crate::{
         alert::AlertComponent, header::HeaderComponent, html::HtmlComponent,
         sidebar::SidebarComponent,
     },
-    route::Route,
+    route::Page,
 };
 
 pub struct BaseComponent;
 
 impl BaseComponent {
-    pub fn build(title: &str, route: Route, body: Markup) -> Markup {
+    pub fn build(title: &str, page: Page, body: Markup) -> Markup {
         HtmlComponent::build(
             title,
             html! {
                 div class="flex" {
-                    (SidebarComponent::build(route))
+                    (SidebarComponent::build(page))
                     div class="flex-1" {
                         (HeaderComponent::build())
                         main class="flex-1 p-6" {

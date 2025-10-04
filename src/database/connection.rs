@@ -1,15 +1,19 @@
-use std::env;
+use std::{
+    env,
+    sync::{Arc, Mutex},
+};
 
 use diesel::{Connection, RunQueryDsl, SqliteConnection, sql_query};
 use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
 use eyre::Result;
+use tokio::task::spawn_blocking;
 
 use crate::DATABASE_URL_ENVIROMENT;
 
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!("migrations/");
 
 pub struct Database {
-    connection: SqliteConnection,
+    connection: Arc<Mutex<SqliteConnection>>,
 }
 
 impl Database {
@@ -20,7 +24,7 @@ impl Database {
         Self::run_migrations(&url)?;
 
         // Establish a connection to the sqlite database
-        let connection = SqliteConnection::establish(&url)?;
+        let connection = Arc::new(Mutex::new(SqliteConnection::establish(&url)?));
         Ok(Self { connection })
     }
 
@@ -41,4 +45,22 @@ impl Database {
             .expect("Failed to run migrations");
         Ok(())
     }
+}
+
+pub async fn run_db<T: Send + 'static, D: Send + 'static>(
+    connection: &Database,
+    function: T,
+) -> Result<D>
+where
+    T: Fn(&mut SqliteConnection) -> D,
+{
+    let connection = connection.connection.clone();
+    Ok(spawn_blocking(move || {
+        function(
+            &mut connection
+                .lock()
+                .expect("Failed to lock database connection"),
+        )
+    })
+    .await?)
 }

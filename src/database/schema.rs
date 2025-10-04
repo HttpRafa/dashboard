@@ -8,3 +8,13 @@ diesel::table! {
         mail -> Text,
     }
 }
+
+diesel::table! {
+    sessions (token) {
+        token -> Text,
+        account_id -> Text,
+        expires -> Date,
+    }
+}
+
+diesel::joinable!(sessions -> accounts (account_id));
