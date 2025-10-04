@@ -52,15 +52,15 @@ pub async fn run_db<T: Send + 'static, D: Send + 'static>(
     function: T,
 ) -> Result<D>
 where
-    T: Fn(&mut SqliteConnection) -> D,
+    T: Fn(&mut SqliteConnection) -> Result<D>,
 {
     let connection = connection.connection.clone();
-    Ok(spawn_blocking(move || {
+    spawn_blocking(move || {
         function(
             &mut connection
                 .lock()
                 .expect("Failed to lock database connection"),
         )
     })
-    .await?)
+    .await?
 }

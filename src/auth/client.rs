@@ -1,6 +1,9 @@
 use std::env;
 
-use diesel::RunQueryDsl;
+use diesel::{
+    ExpressionMethods, RunQueryDsl, SelectableHelper,
+    query_dsl::methods::{FilterDsl, SelectDsl},
+};
 use eyre::Result;
 use openidconnect::{
     Client, ClientId, ClientSecret, CsrfToken, EmptyAdditionalClaims, EmptyExtraTokenFields,
@@ -19,7 +22,7 @@ use uuid::Uuid;
 
 use crate::database::{
     connection::{Database, run_db},
-    model::oidc::NewOidcRequest,
+    model::oidc::{NewOidcRequest, OidcRequest},
     schema,
 };
 
@@ -85,7 +88,7 @@ impl AuthClient {
         Ok(Self { inner, http })
     }
 
-    pub async fn create_oidc_token(
+    pub async fn create_oidc_request(
         &self,
         database: &Database,
         pkce_verifier: PkceCodeVerifier,
@@ -109,11 +112,36 @@ impl AuthClient {
         run_db(database, move |connection| {
             diesel::insert_into(schema::oidc::table)
                 .values(&oidc)
-                .execute(connection)
+                .execute(connection)?;
+
+            Ok(())
         })
-        .await??;
+        .await?;
 
         Ok(token)
+    }
+
+    pub async fn find_oidc_request(
+        &self,
+        database: &Database,
+        token: String,
+    ) -> Result<(PkceCodeVerifier, CsrfToken, Nonce)> {
+        let oidc = run_db(database, move |connection| {
+            let oidc = schema::oidc::table
+                .filter(schema::oidc::token.eq(&token))
+                .select(OidcRequest::as_select())
+                .first(connection)?;
+            diesel::delete(schema::oidc::table.filter(schema::oidc::token.eq(&token)))
+                .execute(connection)?;
+            Ok(oidc)
+        })
+        .await?;
+
+        Ok((
+            PkceCodeVerifier::new(oidc.pkce_verifier),
+            CsrfToken::new(oidc.csrf_token),
+            Nonce::new(oidc.nonce),
+        ))
     }
 
     pub fn get_client(&self) -> &InnerClient {

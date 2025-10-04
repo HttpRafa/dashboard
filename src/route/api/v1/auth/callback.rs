@@ -1,46 +1,37 @@
+use constant_time_eq::constant_time_eq;
+use openidconnect::{AccessTokenHash, AuthorizationCode, OAuth2TokenResponse, TokenResponse};
 use rocket::{
     State, get,
-    http::CookieJar,
+    http::{CookieJar, Status},
     response::{Redirect, status::Custom},
     uri,
 };
 
-use crate::auth::client::AuthClient;
+use crate::{auth::client::AuthClient, database::connection::Database};
 
 #[get("/auth/callback?<code>&<state>")]
 pub async fn callback(
     code: &str,
     state: &str,
     oidc: &State<AuthClient>,
+    database: &State<Database>,
     jar: &CookieJar<'_>,
 ) -> Result<Redirect, Custom<String>> {
-    /*let pkce_verifier = PkceCodeVerifier::new(
-        jar.get_private("pkce_verifier")
-            .ok_or(Custom(
-                Status::PreconditionFailed,
-                "Missing PKCE-Verifier cookie".into(),
-            ))?
-            .value()
-            .into(),
-    );
-    let csrf_token = jar.get_private("csrf_token").ok_or(Custom(
-        Status::PreconditionFailed,
-        "Missing CSRF-Token cookie".into(),
-    ))?;
-    let nonce = Nonce::new(
-        jar.get_private("nonce")
-            .ok_or(Custom(
-                Status::PreconditionFailed,
-                "Missing NOnce cookie".into(),
-            ))?
-            .value()
-            .into(),
-    );
-    jar.remove_private("pkce_verifier");
-    jar.remove_private("csrf_token");
-    jar.remove_private("nonce");
+    let token = jar
+        .get("session_token")
+        .ok_or(Custom(
+            Status::PreconditionFailed,
+            "Missing SESSION-Token cookie".into(),
+        ))?
+        .value()
+        .to_string();
 
-    if !constant_time_eq(state.as_bytes(), csrf_token.value().as_bytes()) {
+    let (pkce_verifier, csrf_token, nonce) = oidc
+        .find_oidc_request(database, token)
+        .await
+        .map_err(|_| Custom(Status::InternalServerError, "Invalid session token".into()))?;
+
+    if !constant_time_eq(state.as_bytes(), csrf_token.secret().as_bytes()) {
         return Err(Custom(Status::BadRequest, "CSRF token mismatch".into()));
     }
 
@@ -78,7 +69,17 @@ pub async fn callback(
                 "Invalid access token".into(),
             ));
         }
-    }*/
+    }
+
+    println!(
+        "User {} with e-mail address {} has authenticated successfully",
+        claims.preferred_username().map(|username| username.as_str())
+            .unwrap_or("<not provided>"),
+        claims
+            .email()
+            .map(|email| email.as_str())
+            .unwrap_or("<not provided>"),
+    );
 
     Ok(Redirect::to(uri!("/")))
 }

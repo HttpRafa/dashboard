@@ -1,13 +1,14 @@
 use diesel::{
     Selectable,
-    prelude::{Insertable, Queryable},
+    prelude::{Identifiable, Insertable, Queryable},
 };
 use time::Date;
 
 use crate::database::schema;
 
-#[derive(Queryable, Selectable)]
+#[derive(Queryable, Selectable, Identifiable)]
 #[diesel(table_name = schema::oidc)]
+#[diesel(primary_key(token))]
 pub struct OidcRequest {
     pub token: String,
     pub pkce_verifier: String,
