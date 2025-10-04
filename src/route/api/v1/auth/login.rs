@@ -1,14 +1,18 @@
 use openidconnect::{CsrfToken, Nonce, PkceCodeChallenge, Scope, core::CoreAuthenticationFlow};
 use rocket::{
     State, get,
-    http::{Cookie, CookieJar},
+    http::{Cookie, CookieJar, SameSite, private::cookie::CookieBuilder},
     response::Redirect,
 };
 
-use crate::auth::client::AuthClient;
+use crate::{auth::client::AuthClient, database::connection::Database};
 
 #[get("/auth/login")]
-pub async fn login(oidc: &State<AuthClient>, jar: &CookieJar<'_>) -> Redirect {
+pub async fn login(
+    oidc: &State<AuthClient>,
+    database: &State<Database>,
+    jar: &CookieJar<'_>,
+) -> Redirect {
     let (pkce_challenge, pkce_verifier) = PkceCodeChallenge::new_random_sha256();
 
     let (auth_url, csrf_token, nonce) = oidc
@@ -23,12 +27,25 @@ pub async fn login(oidc: &State<AuthClient>, jar: &CookieJar<'_>) -> Redirect {
         .set_pkce_challenge(pkce_challenge)
         .url();
 
-    jar.add_private(Cookie::build((
-        "pkce_verifier",
-        pkce_verifier.into_secret(),
-    )));
-    jar.add_private(Cookie::build(("csrf_token", csrf_token.into_secret())));
-    jar.add_private(Cookie::build(("nonce", nonce.secret().clone())));
+    let token = oidc
+        .create_oidc_token(database, pkce_verifier, csrf_token, nonce)
+        .await
+        .expect("Failed to create session token");
+
+    println!("{}", token);
 
     Redirect::to(auth_url.to_string())
+}
+
+fn build_cookie(key: &str, value: String) -> CookieBuilder<'_> {
+    let mut builder = Cookie::build((key, value));
+    builder = builder.same_site(SameSite::Lax).http_only(true);
+
+    // Conditionally apply the secure setting only in release builds
+    #[cfg(not(debug_assertions))]
+    {
+        builder = builder.secure(true);
+    }
+
+    builder
 }

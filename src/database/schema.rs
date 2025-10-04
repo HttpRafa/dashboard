@@ -17,4 +17,14 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    oidc (token) {
+        token -> Text,
+        pkce_verifier -> Text,
+        csrf_token -> Text,
+        nonce -> Text,
+        expires -> Date,
+    }
+}
+
 diesel::joinable!(sessions -> accounts (account_id));
