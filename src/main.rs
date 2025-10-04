@@ -1,7 +1,8 @@
 use eyre::Result;
 
-use crate::{database::connection::Database, route::launch_rocket};
+use crate::{auth::client::AuthClient, database::connection::Database, route::launch_rocket};
 
+mod auth;
 mod component;
 mod database;
 mod route;
@@ -14,7 +15,8 @@ async fn main() -> Result<()> {
     dotenvy::dotenv()?;
 
     let database = Database::establish()?;
+    let oidc = AuthClient::create().await?;
 
-    launch_rocket().await?;
+    launch_rocket(database, oidc).await?;
     Ok(())
 }

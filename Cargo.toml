@@ -12,7 +12,7 @@ eyre = { version = "0.6.12", default-features = false, features = ["auto-install
 color-eyre = "0.6.5"
 
 # Web framework
-rocket = "0.5.1"
+rocket = { version = "0.5.1", features = ["secrets"] }
 tokio = "1.47.1"
 maud = { version = "0.27.0", features = ["rocket"] }
 
@@ -23,4 +23,4 @@ libsqlite3-sys = { version = "0.35.0", features = ["bundled"] }
 time = "0.3.44"
 
 # OpenID
-openidconnect = "4.0.1"
+openidconnect = { version = "4.0.1", features = ["reqwest"] }

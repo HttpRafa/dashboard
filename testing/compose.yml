@@ -1,0 +1,84 @@
+x-authentik-app-env: &authentik-app-env
+  AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+  AUTHENTIK_POSTGRESQL__PASSWORD: brBzlO3BSEwArHmvfKoPgnlp5Uh2a46WhshOAkTGViFBR3v4
+  AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+  AUTHENTIK_REDIS__HOST: redis
+  AUTHENTIK_SECRET_KEY: aHSJpn0fo7lo0aJ3peXcVUWcENlamQBRIRkSVnULrmpV3q9/
+
+services:
+  postgresql:
+    environment:
+      POSTGRES_DB: ${PG_DB:-authentik}
+      POSTGRES_PASSWORD: brBzlO3BSEwArHmvfKoPgnlp5Uh2a46WhshOAkTGViFBR3v4
+      POSTGRES_USER: ${PG_USER:-authentik}
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+      - CMD-SHELL
+      - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+      timeout: 5s
+    image: docker.io/library/postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+    - authentik_database:/var/lib/postgresql/data
+
+  redis:
+    command: --save 60 1 --loglevel warning
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+      - CMD-SHELL
+      - redis-cli ping | grep PONG
+      timeout: 3s
+    image: docker.io/library/redis:alpine
+    restart: unless-stopped
+    volumes:
+    - authentik_redis:/data
+
+  server:
+    command: server
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      <<: *authentik-app-env
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.8.4}
+    ports:
+    - ${COMPOSE_PORT_HTTP:-9000}:9000
+    - ${COMPOSE_PORT_HTTPS:-9443}:9443
+    restart: unless-stopped
+    volumes:
+    - authentik_media:/media
+    - authentik_templates:/templates
+
+  worker:
+    command: worker
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      <<: *authentik-app-env
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.8.4}
+    restart: unless-stopped
+    user: root
+    volumes:
+    - authentik_media:/media
+    - authentik_certs:/certs
+    - authentik_templates:/templates
+
+volumes:
+  authentik_database:
+  authentik_redis:
+  authentik_media:
+  authentik_templates:
+  authentik_certs:
