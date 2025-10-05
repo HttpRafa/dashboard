@@ -1,4 +1,3 @@
 -- This file should undo anything in `up.sql`
 DROP TABLE IF EXISTS `accounts`;
-DROP TABLE IF EXISTS `oidc`;
 DROP TABLE IF EXISTS `sessions`;

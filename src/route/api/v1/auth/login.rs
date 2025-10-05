@@ -1,16 +1,19 @@
 use openidconnect::{CsrfToken, Nonce, PkceCodeChallenge, Scope, core::CoreAuthenticationFlow};
 use rocket::{
-    get, http::{private::cookie::CookieBuilder, Cookie, CookieJar, SameSite}, response::{status::Custom, Redirect}, State
+    State, get,
+    http::{Cookie, CookieJar, SameSite, Status, private::cookie::CookieBuilder},
+    response::Redirect,
 };
 
-use crate::{auth::client::AuthClient, database::connection::Database};
+use crate::auth::client::AuthClient;
+
+pub const SESSION_TOKEN_COOKIE: &str = "session_token";
 
 #[get("/auth/login")]
 pub async fn login(
     oidc: &State<AuthClient>,
-    database: &State<Database>,
     jar: &CookieJar<'_>,
-) -> Result<Redirect, Custom<String>> {
+) -> Result<Redirect, (Status, &'static str)> {
     let (pkce_challenge, pkce_verifier) = PkceCodeChallenge::new_random_sha256();
 
     let (auth_url, csrf_token, nonce) = oidc
@@ -26,10 +29,9 @@ pub async fn login(
         .url();
 
     let token = oidc
-        .create_oidc_request(database, pkce_verifier, csrf_token, nonce)
-        .await
-        .expect("Failed to create session token");
-    jar.add(build_cookie("session_token", token));
+        .create_oidc_request(pkce_verifier, csrf_token, nonce)
+        .await;
+    jar.add(build_cookie(SESSION_TOKEN_COOKIE, token));
 
     Ok(Redirect::to(auth_url.to_string()))
 }

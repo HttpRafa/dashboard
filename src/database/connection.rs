@@ -47,12 +47,10 @@ impl Database {
     }
 }
 
-pub async fn run_db<T: Send + 'static, D: Send + 'static>(
-    connection: &Database,
-    function: T,
-) -> Result<D>
+pub async fn run_db<T, D>(connection: &Database, function: T) -> Result<D>
 where
-    T: Fn(&mut SqliteConnection) -> Result<D>,
+    T: Send + 'static + Fn(&mut SqliteConnection) -> Result<D>,
+    D: Send + 'static,
 {
     let connection = connection.connection.clone();
     spawn_blocking(move || {

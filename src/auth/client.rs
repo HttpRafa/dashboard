@@ -1,10 +1,7 @@
-use std::env;
+use std::{env, sync::Arc, time::Duration};
 
-use diesel::{
-    ExpressionMethods, RunQueryDsl, SelectableHelper,
-    query_dsl::methods::{FilterDsl, SelectDsl},
-};
 use eyre::Result;
+use moka::future::Cache;
 use openidconnect::{
     Client, ClientId, ClientSecret, CsrfToken, EmptyAdditionalClaims, EmptyExtraTokenFields,
     EndpointMaybeSet, EndpointNotSet, EndpointSet, IdTokenFields, IssuerUrl, Nonce,
@@ -17,14 +14,7 @@ use openidconnect::{
     },
     reqwest::{self, ClientBuilder, redirect::Policy},
 };
-use time::{Duration, OffsetDateTime};
 use uuid::Uuid;
-
-use crate::database::{
-    connection::{Database, run_db},
-    model::oidc::{NewOidcRequest, OidcRequest},
-    schema,
-};
 
 pub type InnerClient = Client<
     EmptyAdditionalClaims,
@@ -55,9 +45,19 @@ pub type InnerClient = Client<
     EndpointMaybeSet,
 >;
 
+const OIDC_TIME_TO_LIVE: Duration = Duration::from_secs(60 * 5);
+
+pub struct AuthRequest {
+    pkce_verifier: PkceCodeVerifier,
+    csrf_token: CsrfToken,
+    nonce: Nonce,
+}
+
 pub struct AuthClient {
     inner: InnerClient,
     http: reqwest::Client,
+
+    cache: Cache<String, Arc<AuthRequest>>,
 }
 
 impl AuthClient {
@@ -85,63 +85,38 @@ impl AuthClient {
             CoreClient::from_provider_metadata(provider_metadata, client_id, Some(client_secret))
                 .set_redirect_uri(redirect_url);
 
-        Ok(Self { inner, http })
+        let cache = Cache::builder()
+            .max_capacity(5_000)
+            .time_to_live(OIDC_TIME_TO_LIVE)
+            .build();
+
+        Ok(Self { inner, http, cache })
     }
 
     pub async fn create_oidc_request(
         &self,
-        database: &Database,
         pkce_verifier: PkceCodeVerifier,
         csrf_token: CsrfToken,
         nonce: Nonce,
-    ) -> Result<String> {
-        let pkce_verifier = pkce_verifier.into_secret();
-        let csrf_token = csrf_token.into_secret();
-        let nonce = nonce.secret().to_string();
-
+    ) -> String {
         let token = Uuid::new_v4().to_string();
-        let expires = OffsetDateTime::now_utc().date() + Duration::hours(1);
-        let oidc = NewOidcRequest {
-            token: token.clone(),
+
+        let request = AuthRequest {
             pkce_verifier,
             csrf_token,
             nonce,
-            expires,
         };
+        self.cache.insert(token.clone(), Arc::new(request)).await;
 
-        run_db(database, move |connection| {
-            diesel::insert_into(schema::oidc::table)
-                .values(&oidc)
-                .execute(connection)?;
-
-            Ok(())
-        })
-        .await?;
-
-        Ok(token)
+        token
     }
 
     pub async fn find_oidc_request(
         &self,
-        database: &Database,
-        token: String,
-    ) -> Result<(PkceCodeVerifier, CsrfToken, Nonce)> {
-        let oidc = run_db(database, move |connection| {
-            let oidc = schema::oidc::table
-                .filter(schema::oidc::token.eq(&token))
-                .select(OidcRequest::as_select())
-                .first(connection)?;
-            diesel::delete(schema::oidc::table.filter(schema::oidc::token.eq(&token)))
-                .execute(connection)?;
-            Ok(oidc)
-        })
-        .await?;
-
-        Ok((
-            PkceCodeVerifier::new(oidc.pkce_verifier),
-            CsrfToken::new(oidc.csrf_token),
-            Nonce::new(oidc.nonce),
-        ))
+        token: &str,
+    ) -> Option<(PkceCodeVerifier, CsrfToken, Nonce)> {
+        let request = Arc::into_inner(self.cache.remove(token).await?)?;
+        Some((request.pkce_verifier, request.csrf_token, request.nonce))
     }
 
     pub fn get_client(&self) -> &InnerClient {

@@ -1,79 +1,123 @@
 use constant_time_eq::constant_time_eq;
+use eyre::eyre;
 use openidconnect::{AccessTokenHash, AuthorizationCode, OAuth2TokenResponse, TokenResponse};
 use rocket::{
     State, get,
     http::{CookieJar, Status},
-    response::{Redirect, status::Custom},
+    response::Redirect,
     uri,
 };
 
-use crate::{auth::client::AuthClient, database::connection::Database};
+use crate::{auth::client::AuthClient, route::api::v1::auth::login::SESSION_TOKEN_COOKIE};
 
 #[get("/auth/callback?<code>&<state>")]
 pub async fn callback(
     code: &str,
     state: &str,
     oidc: &State<AuthClient>,
-    database: &State<Database>,
     jar: &CookieJar<'_>,
-) -> Result<Redirect, Custom<String>> {
-    let token = jar
-        .get("session_token")
-        .ok_or(Custom(
-            Status::PreconditionFailed,
-            "Missing SESSION-Token cookie".into(),
-        ))?
-        .value()
-        .to_string();
+) -> Result<Redirect, (Status, &'static str)> {
+    let Some(token) = jar.get(SESSION_TOKEN_COOKIE) else {
+        return Err((Status::PreconditionRequired, "Missing session token cookie"));
+    };
+    jar.remove(SESSION_TOKEN_COOKIE);
 
-    let (pkce_verifier, csrf_token, nonce) = oidc
-        .find_oidc_request(database, token)
-        .await
-        .map_err(|_| Custom(Status::InternalServerError, "Invalid session token".into()))?;
+    let Some((pkce_verifier, csrf_token, nonce)) = oidc.find_oidc_request(token.value()).await
+    else {
+        return Err((
+            Status::PreconditionRequired,
+            "The session token is invalid/expired",
+        ));
+    };
 
     if !constant_time_eq(state.as_bytes(), csrf_token.secret().as_bytes()) {
-        return Err(Custom(Status::BadRequest, "CSRF token mismatch".into()));
+        return Err((Status::BadRequest, "CSRF token mismatch"));
     }
 
-    let token_response = oidc
+    let request = match oidc
         .get_client()
         .exchange_code(AuthorizationCode::new(code.to_string()))
-        .map_err(|_| Custom(Status::InternalServerError, "Token exchange failed".into()))?
+    {
+        Ok(request) => request,
+        Err(error) => {
+            println!("{:?}", eyre!(error));
+            return Err((Status::InternalServerError, "Configuration error"));
+        }
+    };
+
+    let response = match request
         .set_pkce_verifier(pkce_verifier)
         .request_async(oidc.get_http())
         .await
-        .map_err(|_| Custom(Status::InternalServerError, "Token exchange failed".into()))?;
+    {
+        Ok(response) => response,
+        Err(error) => {
+            println!("{:?}", eyre!(error));
+            return Err((Status::InternalServerError, "Failed to exchange IdP code"));
+        }
+    };
 
-    let id_token = token_response.id_token().ok_or(Custom(
-        Status::InternalServerError,
-        "Server did not return an ID token".into(),
-    ))?;
-    let claims = id_token
-        .claims(&oidc.get_client().id_token_verifier(), &nonce)
-        .map_err(|_| Custom(Status::InternalServerError, "Failed to get claims".into()))?;
+    let Some(id_token) = response.id_token() else {
+        return Err((
+            Status::InternalServerError,
+            "IdP did not return an valid ID token",
+        ));
+    };
 
-    if let Some(expected_access_token_hash) = claims.access_token_hash() {
-        let actual_access_token_hash = AccessTokenHash::from_token(
-            token_response.access_token(),
-            id_token
-                .signing_alg()
-                .map_err(|_| Custom(Status::InternalServerError, "Token is invalid".into()))?,
-            id_token
-                .signing_key(&oidc.get_client().id_token_verifier())
-                .map_err(|_| Custom(Status::InternalServerError, "Token is invalid".into()))?,
-        )
-        .map_err(|_| Custom(Status::InternalServerError, "Token is invalid".into()))?;
-        if actual_access_token_hash != *expected_access_token_hash {
-            return Err(Custom(
+    let claims = match id_token.claims(&oidc.get_client().id_token_verifier(), &nonce) {
+        Ok(claims) => claims,
+        Err(error) => {
+            println!("{:?}", eyre!(error));
+            return Err((
                 Status::InternalServerError,
-                "Invalid access token".into(),
+                "Failed to get claims from provided ID token",
             ));
+        }
+    };
+
+    if let Some(expected_token_hash) = claims.access_token_hash() {
+        let signing_alg = match id_token.signing_alg() {
+            Ok(signing_alg) => signing_alg,
+            Err(error) => {
+                println!("{:?}", error);
+                return Err((
+                    Status::InternalServerError,
+                    "Failed to verify signature of the ID token",
+                ));
+            }
+        };
+
+        let verifier = oidc.get_client().id_token_verifier();
+        let signing_key = match id_token.signing_key(&verifier) {
+            Ok(signing_key) => signing_key,
+            Err(error) => {
+                println!("{:?}", error);
+                return Err((
+                    Status::InternalServerError,
+                    "Failed to verify signature of the ID token",
+                ));
+            }
+        };
+
+        let actual_token_hash =
+            match AccessTokenHash::from_token(response.access_token(), signing_alg, signing_key) {
+                Ok(actual_token_hash) => actual_token_hash,
+                Err(error) => {
+                    println!("{:?}", error);
+                    return Err((Status::InternalServerError, "Failed to sign auth token"));
+                }
+            };
+
+        if actual_token_hash != *expected_token_hash {
+            return Err((Status::BadRequest, "Access token mismatch"));
         }
     }
 
     println!(
         "User {} with e-mail address {} has authenticated successfully",
-        claims.preferred_username().map(|username| username.as_str())
+        claims
+            .preferred_username()
+            .map(|username| username.as_str())
             .unwrap_or("<not provided>"),
         claims
             .email()
