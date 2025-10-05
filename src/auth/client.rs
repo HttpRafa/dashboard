@@ -1,4 +1,4 @@
-use std::{env, sync::Arc, time::Duration};
+use std::{env, time::Duration};
 
 use eyre::Result;
 use moka::future::Cache;
@@ -45,7 +45,7 @@ pub type InnerClient = Client<
     EndpointMaybeSet,
 >;
 
-const OIDC_TIME_TO_LIVE: Duration = Duration::from_secs(60 * 5);
+const OIDC_CACHE_TTL: Duration = Duration::from_secs(60 * 5);
 
 pub struct AuthRequest {
     pkce_verifier: PkceCodeVerifier,
@@ -57,7 +57,7 @@ pub struct AuthClient {
     inner: InnerClient,
     http: reqwest::Client,
 
-    cache: Cache<String, Arc<AuthRequest>>,
+    cache: Cache<String, AuthRequest>,
 }
 
 impl AuthClient {
@@ -87,7 +87,7 @@ impl AuthClient {
 
         let cache = Cache::builder()
             .max_capacity(5_000)
-            .time_to_live(OIDC_TIME_TO_LIVE)
+            .time_to_live(OIDC_CACHE_TTL)
             .build();
 
         Ok(Self { inner, http, cache })
@@ -106,7 +106,7 @@ impl AuthClient {
             csrf_token,
             nonce,
         };
-        self.cache.insert(token.clone(), Arc::new(request)).await;
+        self.cache.insert(token.clone(), request).await;
 
         token
     }
@@ -115,7 +115,7 @@ impl AuthClient {
         &self,
         token: &str,
     ) -> Option<(PkceCodeVerifier, CsrfToken, Nonce)> {
-        let request = Arc::into_inner(self.cache.remove(token).await?)?;
+        let request = self.cache.remove(token).await?;
         Some((request.pkce_verifier, request.csrf_token, request.nonce))
     }
 
@@ -125,5 +125,15 @@ impl AuthClient {
 
     pub fn get_http(&self) -> &reqwest::Client {
         &self.http
+    }
+}
+
+impl Clone for AuthRequest {
+    fn clone(&self) -> Self {
+        Self {
+            pkce_verifier: PkceCodeVerifier::new(self.pkce_verifier.secret().clone()),
+            csrf_token: self.csrf_token.clone(),
+            nonce: self.nonce.clone(),
+        }
     }
 }
