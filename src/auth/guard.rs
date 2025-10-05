@@ -1,3 +1,4 @@
+use chrono::Utc;
 use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl, SelectableHelper};
 use eyre::eyre;
 use rocket::{
@@ -49,6 +50,7 @@ impl<'r> FromRequest<'r> for Account {
             Ok(schema::sessions::table
                 .inner_join(schema::accounts::table)
                 .filter(schema::sessions::token.eq(&token))
+                .filter(schema::sessions::expires.gt(Utc::now().naive_utc()))
                 .select(Account::as_select())
                 .first(connection)?)
         })
@@ -58,7 +60,7 @@ impl<'r> FromRequest<'r> for Account {
             Err(error) => {
                 request.cookies().remove(SESSION_TOKEN_COOKIE_NAME);
                 println!("{:?}", eyre!(error));
-                return Outcome::Error((Status::Unauthorized, AuthError::Invalid));
+                return Outcome::Forward(Status::Unauthorized);
             }
         };
 

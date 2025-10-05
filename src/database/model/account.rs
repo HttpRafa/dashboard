@@ -1,6 +1,6 @@
 use diesel::{
     Selectable,
-    prelude::{Identifiable, Queryable},
+    prelude::{Identifiable, Insertable, Queryable},
 };
 
 use crate::database::schema;
@@ -12,4 +12,13 @@ pub struct Account {
     pub oidc: String,
     pub name: String,
     pub mail: String,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = schema::accounts)]
+pub struct NewAccount<'a> {
+    pub id: &'a str,
+    pub oidc: &'a str,
+    pub name: &'a str,
+    pub mail: &'a str,
 }

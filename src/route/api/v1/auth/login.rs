@@ -36,7 +36,7 @@ pub async fn login(
     Ok(Redirect::to(auth_url.to_string()))
 }
 
-fn build_cookie(key: &str, value: String) -> CookieBuilder<'_> {
+pub fn build_cookie(key: &str, value: String) -> CookieBuilder<'_> {
     let mut builder = Cookie::build((key, value));
     builder = builder.same_site(SameSite::Lax).http_only(true);
 

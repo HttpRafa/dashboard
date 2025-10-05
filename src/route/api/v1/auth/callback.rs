@@ -9,9 +9,11 @@ use rocket::{
 };
 
 use crate::{
-    auth::client::AuthClient,
+    auth::{SESSION_TOKEN_COOKIE_NAME, client::AuthClient},
+    database::connection::Database,
     route::{
-        api::v1::auth::login::OIDC_TOKEN_COOKIE_NAME, web::dashboard::rocket_uri_macro_dashboard,
+        api::v1::auth::login::{OIDC_TOKEN_COOKIE_NAME, build_cookie},
+        web::dashboard::rocket_uri_macro_dashboard,
     },
 };
 
@@ -20,6 +22,7 @@ pub async fn callback(
     code: &str,
     state: &str,
     oidc: &State<AuthClient>,
+    database: &State<Database>,
     jar: &CookieJar<'_>,
 ) -> Result<Redirect, (Status, &'static str)> {
     let Some(token) = jar.get(OIDC_TOKEN_COOKIE_NAME) else {
@@ -69,7 +72,10 @@ pub async fn callback(
         ));
     };
 
-    let claims = match id_token.claims(&oidc.get_client().id_token_verifier(), &nonce) {
+    let claims: &openidconnect::IdTokenClaims<
+        openidconnect::EmptyAdditionalClaims,
+        openidconnect::core::CoreGenderClaim,
+    > = match id_token.claims(&oidc.get_client().id_token_verifier(), &nonce) {
         Ok(claims) => claims,
         Err(error) => {
             println!("{:?}", eyre!(error));
@@ -118,16 +124,32 @@ pub async fn callback(
         }
     }
 
+    let account = match database.find_or_create_account(claims).await {
+        Ok(account) => account,
+        Err(error) => {
+            println!("{:?}", eyre!(error));
+            return Err((
+                Status::InternalServerError,
+                "Failed to find user/create a new user",
+            ));
+        }
+    };
+
+    let token = match database.create_session(&account).await {
+        Ok(token) => token,
+        Err(error) => {
+            println!("{:?}", eyre!(error));
+            return Err((
+                Status::InternalServerError,
+                "Failed to create new session for user",
+            ));
+        }
+    };
+    jar.add(build_cookie(SESSION_TOKEN_COOKIE_NAME, token));
+
     println!(
         "User {} with e-mail address {} has authenticated successfully",
-        claims
-            .preferred_username()
-            .map(|username| username.as_str())
-            .unwrap_or("<not provided>"),
-        claims
-            .email()
-            .map(|email| email.as_str())
-            .unwrap_or("<not provided>"),
+        account.name, account.mail,
     );
 
     Ok(Redirect::to(uri!(dashboard)))

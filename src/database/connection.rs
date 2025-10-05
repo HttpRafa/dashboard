@@ -3,12 +3,28 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use diesel::{Connection, RunQueryDsl, SqliteConnection, sql_query};
+use chrono::Utc;
+use diesel::{
+    Connection, ExpressionMethods, OptionalExtension, QueryDsl, RunQueryDsl, SqliteConnection,
+    sql_query,
+};
 use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
-use eyre::Result;
+use eyre::{Result, eyre};
+use openidconnect::{EmptyAdditionalClaims, IdTokenClaims, core::CoreGenderClaim};
 use tokio::task::spawn_blocking;
+use uuid::Uuid;
 
-use crate::DATABASE_URL_ENVIROMENT;
+use crate::{
+    DATABASE_URL_ENVIROMENT,
+    auth::SESSION_TTL,
+    database::{
+        model::{
+            account::{Account, NewAccount},
+            session::NewSession,
+        },
+        schema,
+    },
+};
 
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!("migrations/");
 
@@ -44,6 +60,92 @@ impl Database {
             .run_pending_migrations(MIGRATIONS)
             .expect("Failed to run migrations");
         Ok(())
+    }
+
+    pub async fn find_or_create_account(
+        &self,
+        claims: &IdTokenClaims<EmptyAdditionalClaims, CoreGenderClaim>,
+    ) -> Result<Account> {
+        let oidc = claims.subject().to_string();
+        let Some(name) = claims
+            .name()
+            .and_then(|name| name.get(None))
+            .map(|name| name.to_string())
+        else {
+            return Err(eyre!("IdP did not provide a valid Name"));
+        };
+        let Some(mail) = claims.email().map(|email| email.to_string()) else {
+            return Err(eyre!("IdP did not provide a valid E-Mail"));
+        };
+
+        {
+            let oidc = oidc.clone();
+            if let Some(account) = run_db(self, move |connection| {
+                Ok(schema::accounts::table
+                    .filter(schema::accounts::oidc.eq(&oidc))
+                    .first::<Account>(connection)
+                    .optional()?)
+            })
+            .await?
+            {
+                if account.name != name && account.mail != mail {
+                    // Data changed
+                    return run_db(self, move |connection| {
+                        Ok(diesel::update(schema::accounts::table.find(&account.id))
+                            .set((
+                                schema::accounts::name.eq(&name),
+                                schema::accounts::mail.eq(&mail),
+                            ))
+                            .get_result::<Account>(connection)?)
+                    })
+                    .await;
+                } else {
+                    return Ok(account);
+                }
+            }
+        }
+
+        run_db(self, move |connection| {
+            let account = NewAccount {
+                id: &Uuid::new_v4().to_string(),
+                oidc: &oidc,
+                name: &name,
+                mail: &mail,
+            };
+            Ok(diesel::insert_into(schema::accounts::table)
+                .values(&account)
+                .get_result::<Account>(connection)?)
+        })
+        .await
+    }
+
+    pub async fn create_session(&self, account: &Account) -> Result<String> {
+        let token = Uuid::new_v4().to_string();
+        let expires = Utc::now()
+            .checked_add_signed(SESSION_TTL)
+            .ok_or(eyre!("Failed to compute expire date"))?
+            .naive_utc();
+
+        {
+            let id = account.id.clone();
+            let token = token.clone();
+            run_db(self, move |connection| {
+                let session = NewSession {
+                    token: &token,
+                    account_id: &id,
+                    expires,
+                };
+
+                diesel::insert_into(schema::sessions::table)
+                    .values(&session)
+                    .execute(connection)?;
+
+                Ok(())
+            })
+            .await?;
+        }
+
+        Ok(token)
     }
 }
 
