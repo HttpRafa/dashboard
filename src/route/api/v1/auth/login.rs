@@ -7,9 +7,9 @@ use rocket::{
 
 use crate::auth::client::AuthClient;
 
-pub const SESSION_TOKEN_COOKIE: &str = "session_token";
+pub const OIDC_TOKEN_COOKIE_NAME: &str = "oidc_token";
 
-#[get("/auth/login")]
+#[get("/api/v1/auth/login")]
 pub async fn login(
     oidc: &State<AuthClient>,
     jar: &CookieJar<'_>,
@@ -31,7 +31,7 @@ pub async fn login(
     let token = oidc
         .create_oidc_request(pkce_verifier, csrf_token, nonce)
         .await;
-    jar.add(build_cookie(SESSION_TOKEN_COOKIE, token));
+    jar.add(build_cookie(OIDC_TOKEN_COOKIE_NAME, token));
 
     Ok(Redirect::to(auth_url.to_string()))
 }

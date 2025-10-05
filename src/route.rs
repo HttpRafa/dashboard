@@ -18,7 +18,7 @@ pub async fn launch_rocket(database: Database, oidc: AuthClient) -> Result<()> {
     rocket::build()
         .mount("/", FileServer::from("public/"))
         .mount("/", web::web_routes())
-        .mount("/api/v1", v1::v1_routes())
+        .mount("/", v1::v1_routes())
         .manage(database)
         .manage(oidc)
         .launch()

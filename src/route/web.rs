@@ -1,17 +1,22 @@
 use rocket::{Route, routes};
 
-mod dashboard;
-mod feedback;
-mod issues;
-mod requests;
-mod settings;
+pub mod dashboard;
+pub mod feedback;
+pub mod issues;
+pub mod requests;
+pub mod settings;
 
 pub fn web_routes() -> Vec<Route> {
     routes![
         dashboard::dashboard,
+        dashboard::dashboard_redirect,
         requests::requests,
+        requests::requests_redirect,
         issues::issues,
+        issues::issues_redirect,
         feedback::feedback,
-        settings::settings
+        feedback::feedback_redirect,
+        settings::settings,
+        settings::settings_redirect
     ]
 }

@@ -1,16 +1,22 @@
 use maud::Markup;
-use rocket::get;
+use rocket::{get, response::Redirect, uri};
 
 use crate::{
     component::{root::dashboard::DashboardComponent, util::base::BaseComponent},
-    route::Page,
+    database::model::account::Account,
+    route::{Page, api::v1::auth::login::rocket_uri_macro_login},
 };
 
 #[get("/")]
-pub async fn dashboard() -> Markup {
+pub async fn dashboard(account: Account) -> Markup {
     BaseComponent::build(
         "Dashboard | Home",
         Page::Dashboard,
         DashboardComponent::build(),
     )
+}
+
+#[get("/", rank = 2)]
+pub async fn dashboard_redirect() -> Redirect {
+    Redirect::to(uri!(login))
 }

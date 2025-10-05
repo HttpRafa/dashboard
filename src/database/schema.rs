@@ -18,3 +18,5 @@ diesel::table! {
 }
 
 diesel::joinable!(sessions -> accounts (account_id));
+
+diesel::allow_tables_to_appear_in_same_query!(accounts, sessions,);

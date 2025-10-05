@@ -8,19 +8,24 @@ use rocket::{
     uri,
 };
 
-use crate::{auth::client::AuthClient, route::api::v1::auth::login::SESSION_TOKEN_COOKIE};
+use crate::{
+    auth::client::AuthClient,
+    route::{
+        api::v1::auth::login::OIDC_TOKEN_COOKIE_NAME, web::dashboard::rocket_uri_macro_dashboard,
+    },
+};
 
-#[get("/auth/callback?<code>&<state>")]
+#[get("/api/v1/auth/callback?<code>&<state>")]
 pub async fn callback(
     code: &str,
     state: &str,
     oidc: &State<AuthClient>,
     jar: &CookieJar<'_>,
 ) -> Result<Redirect, (Status, &'static str)> {
-    let Some(token) = jar.get(SESSION_TOKEN_COOKIE) else {
+    let Some(token) = jar.get(OIDC_TOKEN_COOKIE_NAME) else {
         return Err((Status::PreconditionRequired, "Missing session token cookie"));
     };
-    jar.remove(SESSION_TOKEN_COOKIE);
+    jar.remove(OIDC_TOKEN_COOKIE_NAME);
 
     let Some((pkce_verifier, csrf_token, nonce)) = oidc.find_oidc_request(token.value()).await
     else {
@@ -125,5 +130,5 @@ pub async fn callback(
             .unwrap_or("<not provided>"),
     );
 
-    Ok(Redirect::to(uri!("/")))
+    Ok(Redirect::to(uri!(dashboard)))
 }

@@ -1,16 +1,22 @@
 use maud::Markup;
-use rocket::get;
+use rocket::{get, response::Redirect, uri};
 
 use crate::{
     component::{root::settings::SettingsComponent, util::base::BaseComponent},
-    route::Page,
+    database::model::account::Account,
+    route::{Page, api::v1::auth::login::rocket_uri_macro_login},
 };
 
 #[get("/settings")]
-pub async fn settings() -> Markup {
+pub async fn settings(account: Account) -> Markup {
     BaseComponent::build(
         "Dashboard | Settings",
         Page::Settings,
         SettingsComponent::build(),
     )
+}
+
+#[get("/settings", rank = 2)]
+pub async fn settings_redirect() -> Redirect {
+    Redirect::to(uri!(login))
 }
