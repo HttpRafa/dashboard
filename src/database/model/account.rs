@@ -12,6 +12,7 @@ pub struct Account {
     pub oidc: String,
     pub name: String,
     pub mail: String,
+    pub admin: bool,
 }
 
 #[derive(Insertable)]
@@ -21,4 +22,5 @@ pub struct NewAccount<'a> {
     pub oidc: &'a str,
     pub name: &'a str,
     pub mail: &'a str,
+    pub admin: bool,
 }

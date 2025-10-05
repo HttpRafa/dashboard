@@ -12,6 +12,7 @@ pub async fn settings(account: Account) -> Markup {
     BaseComponent::build(
         "Dashboard | Settings",
         Page::Settings,
+        &account,
         SettingsComponent::build(),
     )
 }

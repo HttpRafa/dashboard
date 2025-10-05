@@ -1,13 +1,13 @@
 use maud::{Markup, html};
 
-use crate::{component::util::sidebar::icon::IconComponent, route::Page};
+use crate::{component::util::sidebar::icon::IconComponent, database::model::account::Account, route::Page};
 
 pub mod icon;
 
 pub struct SidebarComponent;
 
 impl SidebarComponent {
-    pub fn build(page: Page) -> Markup {
+    pub fn build(page: Page, account: &Account) -> Markup {
         html! {
             aside class="flex flex-col border-r border-zinc-700 text-zinc-400 w-20 min-h-screen space-y-6" {
                 nav class="flex-1 flex flex-col" {
@@ -18,6 +18,9 @@ impl SidebarComponent {
                 }
                 div class="flex flex-col" {
                     (IconComponent::build(false, "https://auth.httxrafa.dev/", "frame_person", "Identity"))
+                    @if account.admin {
+                        (IconComponent::build(matches!(page, Page::Accounts), "/admin/accounts/", "manage_accounts", "Accounts"))
+                    }
                     (IconComponent::build(matches!(page, Page::Settings), "/settings/", "settings_account_box", "Settings"))
                 }
             }

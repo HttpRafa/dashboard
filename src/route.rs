@@ -11,6 +11,7 @@ pub enum Page {
     Feedback,
     Issues,
     Requests,
+    Accounts,
     Settings,
 }
 

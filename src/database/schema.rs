@@ -6,6 +6,7 @@ diesel::table! {
         oidc -> Text,
         name -> Text,
         mail -> Text,
+        admin -> Bool,
     }
 }
 

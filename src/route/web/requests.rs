@@ -12,6 +12,7 @@ pub async fn requests(account: Account) -> Markup {
     BaseComponent::build(
         "Dashboard | Requests",
         Page::Requests,
+        &account,
         RequestsComponent::build(),
     )
 }

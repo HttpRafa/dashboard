@@ -5,8 +5,7 @@ use std::{
 
 use chrono::Utc;
 use diesel::{
-    Connection, ExpressionMethods, OptionalExtension, QueryDsl, RunQueryDsl, SqliteConnection,
-    sql_query,
+    dsl::count_star, sql_query, Connection, ExpressionMethods, OptionalExtension, QueryDsl, RunQueryDsl, SqliteConnection
 };
 use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
 use eyre::{Result, eyre};
@@ -106,11 +105,19 @@ impl Database {
         }
 
         run_db(self, move |connection| {
+            let is_first = schema::accounts::table.select(count_star()).first::<i64>(connection).map(|count| count == 0)?;
+
+            if is_first {
+                println!("{:?}", eyre!("First user created! {} is now admin.", &name));
+            }
+
             let account = NewAccount {
                 id: &Uuid::new_v4().to_string(),
                 oidc: &oidc,
                 name: &name,
                 mail: &mail,
+                // The first every created account is the admin user
+                admin: is_first,
             };
             Ok(diesel::insert_into(schema::accounts::table)
                 .values(&account)

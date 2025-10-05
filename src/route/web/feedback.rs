@@ -12,6 +12,7 @@ pub async fn feedback(account: Account) -> Markup {
     BaseComponent::build(
         "Dashboard | Feedback",
         Page::Feedback,
+        &account,
         FeedbackComponent::build(),
     )
 }
