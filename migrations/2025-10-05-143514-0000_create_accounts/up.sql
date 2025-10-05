@@ -8,7 +8,7 @@ CREATE TABLE `sessions`(
 
 CREATE TABLE `accounts`(
 	`id` TEXT NOT NULL PRIMARY KEY,
-	`oidc` TEXT NOT NULL,
+	`oidc` TEXT NOT NULL UNIQUE,
 	`name` TEXT NOT NULL,
 	`mail` TEXT NOT NULL
 );
