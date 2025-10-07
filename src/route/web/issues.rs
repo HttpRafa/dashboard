@@ -9,7 +9,12 @@ use crate::{
 
 #[get("/issues")]
 pub async fn issues(account: Account) -> Markup {
-    BaseComponent::build("Dashboard | Issues", Page::Issues, &account, IssuesComponent::build())
+    BaseComponent::build(
+        "Dashboard | Issues",
+        Page::Issues,
+        &account,
+        IssuesComponent::build(),
+    )
 }
 
 #[get("/issues", rank = 2)]

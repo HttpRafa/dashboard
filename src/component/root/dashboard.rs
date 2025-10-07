@@ -20,7 +20,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://pelican.dev/" class="w-8 h-8 rounded-full overflow-hidden" {
-                                                img src="icons/services/pelican.png" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="/icons/services/pelican.png" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {
@@ -44,7 +44,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://github.com/dani-garcia/vaultwarden" class="w-8 h-8 rounded-full overflow-hidden" {
-                                                img src="icons/services/vaultwarden.svg" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="/icons/services/vaultwarden.svg" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {
@@ -68,7 +68,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://opencloud.eu/" class="w-8 h-8 rounded-full overflow-hidden" {
-                                                img src="icons/services/opencloud.png" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="/icons/services/opencloud.png" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {
@@ -92,7 +92,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://immich.app/" class="w-8 h-8 rounded-full overflow-hidden" {
-                                                img src="icons/services/immich.svg" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="/icons/services/immich.svg" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {
@@ -116,7 +116,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://www.min.io/" class="w-8 h-8 rounded-full overflow-hidden" {
-                                                img src="icons/services/minio.png" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="/icons/services/minio.png" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {
@@ -140,7 +140,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://homebox.software/" class="w-8 h-8 rounded-full overflow-hidden" {
-                                                img src="icons/services/homebox.svg" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="/icons/services/homebox.svg" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {
@@ -164,7 +164,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://grafana.com/" class="w-8 h-8 rounded-full overflow-hidden" {
-                                                img src="icons/services/grafana.jpeg" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="/icons/services/grafana.jpeg" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {
@@ -188,7 +188,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://www.jenkins.io/" class="w-8 h-11 rounded-full overflow-hidden" {
-                                                img src="icons/services/jenkins.svg" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="/icons/services/jenkins.svg" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {

@@ -4,7 +4,9 @@ use crate::{
     component::util::{
         alert::AlertComponent, header::HeaderComponent, html::HtmlComponent,
         sidebar::SidebarComponent,
-    }, database::model::account::Account, route::Page
+    },
+    database::model::account::Account,
+    route::Page,
 };
 
 pub struct BaseComponent;

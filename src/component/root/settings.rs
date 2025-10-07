@@ -12,7 +12,7 @@ impl SettingsComponent {
                         "Settings"
                     }
                     p class="text-slate-300 mt-1" {
-                        "Manage your profile and notification preferences."
+                        "Manage your profile and notification preferences"
                     }
                 }
 

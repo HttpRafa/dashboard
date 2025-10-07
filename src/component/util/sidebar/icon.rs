@@ -1,9 +1,10 @@
 use maud::{Markup, html};
+use rocket::http::uri::Origin;
 
 pub struct IconComponent;
 
 impl IconComponent {
-    pub fn build(selected: bool, href: &str, icon: &str, text: &str) -> Markup {
+    pub fn build(selected: bool, href: Origin<'_>, icon: &str, text: &str) -> Markup {
         html! {
             @if selected {
                 button class="flex flex-col items-center justify-center h-16 bg-zinc-700 shadow-[inset_-3px_0_0_0_#00bc7d] cursor-pointer transition" {

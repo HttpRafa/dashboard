@@ -8,6 +8,7 @@ pub mod web;
 
 pub enum Page {
     Dashboard,
+    Services,
     Feedback,
     Issues,
     Requests,
