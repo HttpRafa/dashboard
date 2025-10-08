@@ -10,7 +10,7 @@ use crate::auth::client::AuthClient;
 pub const OIDC_TOKEN_COOKIE_NAME: &str = "oidc_token";
 
 #[get("/api/v1/auth/login")]
-pub async fn login(
+pub async fn v1_login(
     oidc: &State<AuthClient>,
     jar: &CookieJar<'_>,
 ) -> Result<Redirect, (Status, &'static str)> {

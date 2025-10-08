@@ -44,7 +44,7 @@ impl DashboardComponent {
                                     div class="flex items-center justify-between mb-2" {
                                         div class="flex items-center gap-2" {
                                             a href="https://github.com/dani-garcia/vaultwarden" class="w-8 h-8 rounded-full overflow-hidden" {
-                                                img src="/icons/services/vaultwarden.svg" alt="Service Avatar" class="w-full h-full object-cover";
+                                                img src="https://cdn.simpleicons.org/vaultwarden/white" alt="Service Avatar" class="w-full h-full object-cover";
                                             }
                                             div class="flex flex-col mr-2" {
                                                 span class="text-gray-100 text-sm font-semibold" {

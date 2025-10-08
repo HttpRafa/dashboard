@@ -8,7 +8,7 @@ use crate::database::schema;
 #[derive(Queryable, Selectable, Identifiable)]
 #[diesel(table_name = schema::accounts)]
 pub struct Account {
-    pub id: String,
+    pub id: i32,
     pub oidc: String,
     pub name: String,
     pub mail: String,
@@ -18,7 +18,6 @@ pub struct Account {
 #[derive(Insertable)]
 #[diesel(table_name = schema::accounts)]
 pub struct NewAccount<'a> {
-    pub id: &'a str,
     pub oidc: &'a str,
     pub name: &'a str,
     pub mail: &'a str,

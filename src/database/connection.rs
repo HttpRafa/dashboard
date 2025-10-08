@@ -116,7 +116,6 @@ impl Database {
             }
 
             let account = NewAccount {
-                id: &Uuid::new_v4().to_string(),
                 oidc: &oidc,
                 name: &name,
                 mail: &mail,
@@ -138,12 +137,12 @@ impl Database {
             .naive_utc();
 
         {
-            let id = account.id.clone();
+            let account_id = account.id;
             let token = token.clone();
             run_db(self, move |connection| {
                 let session = NewSession {
                     token: &token,
-                    account_id: &id,
+                    account_id,
                     expires,
                 };
 

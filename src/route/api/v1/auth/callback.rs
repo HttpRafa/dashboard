@@ -18,7 +18,7 @@ use crate::{
 };
 
 #[get("/api/v1/auth/callback?<code>&<state>")]
-pub async fn callback(
+pub async fn v1_callback(
     code: &str,
     state: &str,
     oidc: &State<AuthClient>,

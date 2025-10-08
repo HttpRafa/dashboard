@@ -35,7 +35,7 @@ impl SettingsComponent {
                                     "Your profile image will be synced from GitHub."
                                 }
                                 div class="flex items-center space-x-2" {
-                                    input type="text" id="github-profile" placeholder="e.g., someone" class="w-full bg-zinc-800/30 rounded-md py-2 px-3 text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500";
+                                    input type="text" id="github-profile" placeholder="e.g., someone" class="w-full bg-zinc-800/75 rounded-md py-2 px-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500";
                                     button class="bg-emerald-400/65 hover:bg-emerald-700/65 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition cursor-pointer whitespace-nowrap" {
                                         "Save"
                                     }

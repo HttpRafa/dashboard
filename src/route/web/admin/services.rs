@@ -4,10 +4,10 @@ use rocket::{get, response::Redirect, uri};
 use crate::{
     component::{root::admin::services::ServicesComponent, util::base::BaseComponent},
     database::model::account::Account,
-    route::{Page, api::v1::auth::login::rocket_uri_macro_login},
+    route::{Page, api::v1::auth::login::rocket_uri_macro_v1_login},
 };
 
-pub mod new;
+pub mod create;
 
 #[get("/admin/services")]
 pub async fn services(account: Account) -> Markup {
@@ -21,5 +21,5 @@ pub async fn services(account: Account) -> Markup {
 
 #[get("/admin/services", rank = 2)]
 pub async fn services_redirect() -> Redirect {
-    Redirect::to(uri!(login))
+    Redirect::to(uri!(v1_login))
 }

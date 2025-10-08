@@ -1,9 +1,9 @@
 use maud::{Markup, html};
 use rocket::uri;
 
-use crate::route::web::admin::services::new::rocket_uri_macro_new;
+use crate::route::web::admin::services::create::rocket_uri_macro_create;
 
-pub mod new;
+pub mod create;
 
 pub struct ServicesComponent;
 
@@ -22,8 +22,8 @@ impl ServicesComponent {
                         }
                     }
                     div class="flex justify-between items-center mb-4" {
-                        a href=(uri!(new)) class="bg-blue-500/65 hover:bg-blue-700/65 text-white font-semibold py-2 px-6 rounded-lg transition" {
-                            "New service"
+                        a href=(uri!(create)) class="bg-blue-500/65 hover:bg-blue-700/65 text-white font-semibold py-2 px-6 rounded-lg transition" {
+                            "Create service"
                         }
                         button class="flex items-center bg-zinc-600/30 hover:bg-zinc-600/70 text-white font-semibold py-2 px-4 rounded-lg transition cursor-pointer" {
                             span {

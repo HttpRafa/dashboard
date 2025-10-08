@@ -19,6 +19,6 @@ pub struct Session {
 #[diesel(table_name = schema::sessions)]
 pub struct NewSession<'a> {
     pub token: &'a str,
-    pub account_id: &'a str,
+    pub account_id: i32,
     pub expires: NaiveDateTime,
 }
