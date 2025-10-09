@@ -1,6 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE `services`(
-	`id` INTEGER NOT NULL PRIMARY KEY,
+	`id` TEXT NOT NULL PRIMARY KEY,
 	`name` TEXT NOT NULL,
 	`technology` TEXT NOT NULL,
 	`website` TEXT NOT NULL,

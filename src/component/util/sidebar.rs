@@ -22,7 +22,7 @@ impl SidebarComponent {
             aside class="flex flex-col border-r border-zinc-700 text-zinc-400 w-20 min-h-screen space-y-6" {
                 nav class="flex-1 flex flex-col" {
                     (IconComponent::build(matches!(page, Page::Dashboard), uri!(dashboard), "dashboard", "Dashboard"))
-                    @if account.admin {
+                    @if account.is_admin {
                         (IconComponent::build(matches!(page, Page::Services), uri!(services), "apps", "Services"))
                     }
                     (IconComponent::build(matches!(page, Page::Requests), uri!(requests), "assignment_add", "Requests"))
@@ -31,7 +31,7 @@ impl SidebarComponent {
                 }
                 div class="flex flex-col" {
                     (IconComponent::build(false, uri!(dashboard), "frame_person", "Identity"))
-                    @if account.admin {
+                    @if account.is_admin {
                         (IconComponent::build(matches!(page, Page::Accounts), uri!(accounts), "manage_accounts", "Accounts"))
                     }
                     (IconComponent::build(matches!(page, Page::Settings), uri!(settings), "settings_account_box", "Settings"))

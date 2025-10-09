@@ -3,18 +3,18 @@
 /* Users */
 diesel::table! {
     accounts (id) {
-        id -> Integer,
+        id -> Text,
         oidc -> Text,
         name -> Text,
         mail -> Text,
-        admin -> Bool,
+        is_admin -> Bool,
     }
 }
 
 diesel::table! {
     sessions (token) {
         token -> Text,
-        account_id -> Integer,
+        account_id -> Text,
         expires -> Timestamp,
     }
 }
@@ -25,7 +25,7 @@ diesel::allow_tables_to_appear_in_same_query!(accounts, sessions,);
 /* Services */
 diesel::table! {
     services (id) {
-        id -> Integer,
+        id -> Text,
         name -> Text,
         technology -> Text,
         website -> Text,

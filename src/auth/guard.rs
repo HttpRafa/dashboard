@@ -11,7 +11,7 @@ use crate::{
     auth::SESSION_TOKEN_COOKIE_NAME,
     database::{
         connection::{Database, run_db},
-        model::account::Account,
+        model::account::{Account, AdminAccount},
         schema,
     },
 };
@@ -65,5 +65,22 @@ impl<'r> FromRequest<'r> for Account {
         };
 
         Outcome::Success(account)
+    }
+}
+
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for AdminAccount {
+    type Error = ();
+
+    async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
+        let Some(account) = request.guard::<Account>().await.succeeded() else {
+            return Outcome::Error((Status::InternalServerError, ()));
+        };
+
+        if account.is_admin {
+            Outcome::Success(AdminAccount { account })
+        } else {
+            Outcome::Forward(Status::Unauthorized)
+        }
     }
 }

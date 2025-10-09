@@ -1,16 +1,17 @@
 use diesel::{
     Selectable,
-    prelude::{Identifiable, Queryable},
+    prelude::{Identifiable, Insertable, Queryable},
 };
 use rocket::FromForm;
+use uuid::Uuid;
 
 use crate::database::schema;
 
-#[derive(Queryable, Selectable, Identifiable, FromForm)]
+#[derive(Queryable, Selectable, Identifiable, Insertable, FromForm)]
 #[diesel(table_name = schema::services)]
 pub struct Service {
-    #[field(default = -1)]
-    pub id: i32,
+    #[field(default = Uuid::new_v4())]
+    pub id: String,
     pub name: String,
     pub technology: String,
     pub website: String,

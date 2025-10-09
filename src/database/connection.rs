@@ -20,6 +20,7 @@ use crate::{
     database::{
         model::{
             account::{Account, NewAccount},
+            service::Service,
             session::NewSession,
         },
         schema,
@@ -59,6 +60,19 @@ impl Database {
         connection
             .run_pending_migrations(MIGRATIONS)
             .expect("Failed to run migrations");
+        Ok(())
+    }
+
+    pub async fn create_service(&self, service: Service) -> Result<()> {
+        run_db(self, move |connection| {
+            diesel::insert_into(schema::services::table)
+                .values(&service)
+                .execute(connection)?;
+
+            Ok(())
+        })
+        .await?;
+
         Ok(())
     }
 
@@ -106,21 +120,22 @@ impl Database {
         }
 
         run_db(self, move |connection| {
-            let is_first = schema::accounts::table
+            let is_admin = schema::accounts::table
                 .select(count_star())
                 .first::<i64>(connection)
                 .map(|count| count == 0)?;
 
-            if is_first {
+            if is_admin {
                 println!("{:?}", eyre!("First user created! {} is now admin.", &name));
             }
 
             let account = NewAccount {
+                id: &Uuid::new_v4().to_string(),
                 oidc: &oidc,
                 name: &name,
                 mail: &mail,
                 // The first every created account is the admin user
-                admin: is_first,
+                is_admin,
             };
             Ok(diesel::insert_into(schema::accounts::table)
                 .values(&account)
@@ -137,12 +152,12 @@ impl Database {
             .naive_utc();
 
         {
-            let account_id = account.id;
+            let account_id = account.id.clone();
             let token = token.clone();
             run_db(self, move |connection| {
                 let session = NewSession {
                     token: &token,
-                    account_id,
+                    account_id: &account_id,
                     expires,
                 };
 
